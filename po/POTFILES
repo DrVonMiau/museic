@@ -1,0 +1,6 @@
+data/io.github.drvonmiau.Museic.desktop.in
+data/io.github.drvonmiau.Museic.metainfo.xml.in
+data/io.github.drvonmiau.Museic.gschema.xml
+src/main.py
+src/window.py
+src/window.ui

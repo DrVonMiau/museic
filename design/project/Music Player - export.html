@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<template id="__bundler_thumbnail" data-bg-color="#e6e6e4">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#e6e6e4"/>
+    <rect x="120" y="140" width="960" height="520" rx="24" fill="#fbfbfa"/>
+    <circle cx="600" cy="400" r="70" fill="#3B6FD6"/>
+    <path d="M582 368 L582 432 L636 400 Z" fill="#fbfbfa"/>
+  </svg>
+</template>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    html, body { margin: 0; padding: 0; }
+    * { box-sizing: border-box; }
+    ::selection { background: rgba(59,111,214,0.25); }
+    .om-scroll::-webkit-scrollbar { width: 8px; }
+    .om-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 4px; }
+    .om-scroll::-webkit-scrollbar-track { background: transparent; }
+    input.om-search::placeholder { color: #b7b7b7; }
+  </style>
+</helmet>
+
+<div style="{{ rootStyle }}">
+
+  <!-- Titlebar -->
+  <div style="height:40px; min-height:40px; display:flex; align-items:center; padding-left:16px; gap:8px;">
+    <div title="Minimize" style="width:22px; height:22px; border-radius:50%; background:#d6d6d6; display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8a8a8a; cursor:pointer; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.04);">&#8212;</div>
+    <div title="Maximize" style="width:22px; height:22px; border-radius:50%; background:#d6d6d6; display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:10px; color:#8a8a8a; cursor:pointer; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.04);">&#9633;</div>
+    <div title="Close" style="width:22px; height:22px; border-radius:50%; background:#d6d6d6; display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8a8a8a; cursor:pointer; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.04);">&#10005;</div>
+  </div>
+
+  <!-- Content -->
+  <div style="{{ contentStyle }}">
+
+    <!-- Library column: tabs (on grey) + paper -->
+    <div style="{{ libraryColumnStyle }}">
+
+      <!-- Tabs row: centered over the paper, sits on the grey background -->
+      <sc-if value="{{ showLibraryHeader }}" hint-placeholder-val="{{ true }}">
+        <div style="{{ tabsRowStyle }}">
+          <div></div>
+          <div style="display:flex; gap:26px; justify-self:center;">
+            <sc-for list="{{ tabItems }}" as="tab" hint-placeholder-count="3">
+              <div onClick="{{ tab.onSelect }}" style="{{ tab.style }}" style-hover="color:#333;">{{ tab.label }}</div>
+            </sc-for>
+          </div>
+          <input class="om-search" type="text" placeholder="Search" value="{{ searchQuery }}" onChange="{{ onSearchChange }}" style="justify-self:end; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#4a4a4a; border:1px solid #dcdcdc; border-radius:7px; padding:7px 12px; width:180px; background:#fff; outline:none;" />
+        </div>
+      </sc-if>
+      <sc-if value="{{ showDetailHeader }}" hint-placeholder-val="{{ false }}">
+        <div style="{{ detailSpacerStyle }}"></div>
+      </sc-if>
+
+    <!-- Paper -->
+    <div style="{{ paperStyle }}">
+
+      <!-- Header: detail mode (back button) -->
+      <sc-if value="{{ showDetailHeader }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:22px 32px 0 32px;">
+          <div onClick="{{ goBack }}" style="display:inline-flex; align-items:center; gap:6px; white-space:nowrap; font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.04em; color:#6b6b6b; border:1px solid #dcdcdc; border-radius:7px; padding:7px 14px; cursor:pointer; background:#fff;" style-hover="border-color:#b9b9b9; color:#333;">&larr; Back</div>
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; color:#a6a6a6; text-transform:uppercase;">Artist</div>
+        </div>
+      </sc-if>
+
+      <!-- Artists grid -->
+      <sc-if value="{{ showArtistsTab }}" hint-placeholder-val="{{ false }}">
+        <div class="om-scroll" style="flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; padding:24px 32px 32px 32px;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:24px;">
+            <sc-for list="{{ artistCards }}" as="card" hint-placeholder-count="4">
+              <div onClick="{{ card.onOpen }}" style="display:flex; flex-direction:column; gap:10px; cursor:pointer;">
+                <div style="{{ card.swatchStyle }}">
+                  <div style="{{ card.stripeStyle }}"></div>
+                  <div style="position:relative; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.08em; color:#9b9b9b; text-transform:uppercase; background:rgba(255,255,255,0.75); padding:3px 8px; border-radius:4px;">artist photo</div>
+                </div>
+                <div style="font-family:'IBM Plex Sans',sans-serif; font-size:13.5px; font-weight:600; color:#2a2a2a;">{{ card.name }}</div>
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#a3a3a3;">{{ card.subtitle }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- Albums grid -->
+      <sc-if value="{{ showAlbumsTab }}" hint-placeholder-val="{{ false }}">
+        <div class="om-scroll" style="flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; padding:24px 32px 32px 32px;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:24px;">
+            <sc-for list="{{ libraryAlbumCards }}" as="card" hint-placeholder-count="4">
+              <div onClick="{{ card.onOpen }}" style="display:flex; flex-direction:column; gap:10px; cursor:pointer;">
+                <div style="{{ card.swatchStyle }}">
+                  <div style="{{ card.stripeStyle }}"></div>
+                  <div style="position:relative; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.08em; color:#9b9b9b; text-transform:uppercase; background:rgba(255,255,255,0.75); padding:3px 8px; border-radius:4px;">cover art</div>
+                </div>
+                <div style="font-family:'IBM Plex Sans',sans-serif; font-size:13.5px; font-weight:600; color:#2a2a2a;">{{ card.name }}</div>
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#a3a3a3;">{{ card.subtitle }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- Tracks list (library-wide) -->
+      <sc-if value="{{ showTracksTab }}" hint-placeholder-val="{{ false }}">
+        <div class="om-scroll" style="flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; padding:8px 32px 32px 32px;">
+          <sc-for list="{{ libraryTrackRows }}" as="track" hint-placeholder-count="8">
+            <div onClick="{{ track.onPlay }}" style="{{ track.rowStyle }}" style-hover="background:#f5f5f5;">
+              <div style="{{ track.indexStyle }}">{{ track.indexOrIcon }}</div>
+              <div style="flex:2; min-width:0; display:flex; flex-direction:column; gap:2px;">
+                <div style="{{ track.titleStyle }}">{{ track.title }}</div>
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#a3a3a3;">{{ track.artist }}</div>
+              </div>
+              <div style="flex:1; min-width:0; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#a3a3a3; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ track.album }}</div>
+              <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#a3a3a3; flex-shrink:0;">{{ track.duration }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- Artist detail -->
+      <sc-if value="{{ showDetailHeader }}" hint-placeholder-val="{{ false }}">
+        <div class="om-scroll" style="flex:1; min-height:0; overflow-y:auto; overflow-x:hidden;">
+        <div style="display:flex; align-items:center; gap:24px; padding:24px 32px 8px 32px;">
+          <div style="{{ heroArtStyle }}">
+            <div style="{{ stripeOverlayStyle }}"></div>
+            <div style="position:relative; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.08em; color:#9b9b9b; text-transform:uppercase; background:rgba(255,255,255,0.75); padding:3px 8px; border-radius:4px;">artist photo</div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <div style="font-family:'IBM Plex Sans',sans-serif; font-size:30px; font-weight:600; color:#1c1c1c; letter-spacing:-0.01em;">{{ activeArtist.name }}</div>
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#9a9a9a;">{{ artistStats }}</div>
+          </div>
+        </div>
+
+        <div style="padding:20px 32px 4px 32px;">
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; color:#a6a6a6; text-transform:uppercase; margin-bottom:12px;">Albums</div>
+          <div style="display:flex; gap:16px; flex-wrap:wrap;">
+            <sc-for list="{{ detailAlbumChips }}" as="album" hint-placeholder-count="3">
+              <div onClick="{{ album.onSelect }}" style="display:flex; flex-direction:column; gap:8px; cursor:pointer; width:84px;">
+                <div style="{{ album.swatchStyle }}">
+                  <div style="{{ album.stripeStyle }}"></div>
+                </div>
+                <div style="font-family:'IBM Plex Sans',sans-serif; font-size:11.5px; color:#4a4a4a; text-align:center; line-height:1.3; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ album.name }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="padding:20px 32px 24px 32px;">
+          <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:10px;">
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; color:#a6a6a6; text-transform:uppercase;">Tracks</div>
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#bcbcbc;">{{ trackFilterLabel }}</div>
+          </div>
+          <div style="border-top:1px solid #ececec;">
+            <sc-for list="{{ detailTrackRows }}" as="track" hint-placeholder-count="6">
+              <div onClick="{{ track.onPlay }}" style="{{ track.rowStyle }}" style-hover="background:#f5f5f5;">
+                <div style="{{ track.indexStyle }}">{{ track.indexOrIcon }}</div>
+                <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;">
+                  <div style="{{ track.titleStyle }}">{{ track.title }}</div>
+                  <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#a3a3a3;">{{ track.album }}</div>
+                </div>
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#a3a3a3; flex-shrink:0;">{{ track.duration }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        </div>
+      </sc-if>
+    </div>
+    </div>
+
+    <!-- Player panel (floats on the grey background, no card) -->
+    <sc-if value="{{ isPlaying }}" hint-placeholder-val="{{ false }}">
+      <div style="{{ playerPanelStyle }}">
+
+        <div style="{{ playerArtStyle }}">
+          <div style="{{ playerStripeStyle }}"></div>
+          <div style="position:relative; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.08em; color:#9b9b9b; text-transform:uppercase; background:rgba(255,255,255,0.75); padding:3px 8px; border-radius:4px;">cover art</div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:4px; align-items:center; text-align:center;">
+          <div style="font-family:'IBM Plex Sans',sans-serif; font-size:18px; font-weight:600; color:#242422;">{{ currentTrack.title }}</div>
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8f8f8d;">{{ currentTrack.artist }}</div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <div style="height:4px; border-radius:2px; background:#d8d8d6; position:relative; overflow:hidden;">
+            <div style="{{ progressFillStyle }}"></div>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#a3a3a1;">
+            <div>{{ elapsedLabel }}</div>
+            <div>{{ durationLabel }}</div>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:center; gap:22px;">
+          <div onClick="{{ prevTrack }}" style="cursor:pointer; color:#6b6b6b; font-size:18px; line-height:1;" style-hover="color:#1c1c1c;">&#9198;</div>
+          <div onClick="{{ togglePlay }}" style="{{ playButtonStyle }}">{{ playIcon }}</div>
+          <div onClick="{{ nextTrack }}" style="cursor:pointer; color:#6b6b6b; font-size:18px; line-height:1;" style-hover="color:#1c1c1c;">&#9197;</div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px; margin-top:auto;">
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#8f8f8d;">&#9834;</div>
+          <div style="flex:1; height:4px; border-radius:2px; background:#d8d8d6; position:relative;">
+            <div style="position:absolute; left:0; top:0; bottom:0; width:70%; background:#b4b4b0; border-radius:2px;"></div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const ACCENT = "#3B6FD6";
+
+function stripe(hue) {
+  return "repeating-linear-gradient(45deg, " + hue + " 0px, " + hue + " 2px, transparent 2px, transparent 7px)";
+}
+
+function parseDur(s) {
+  const [m, sec] = s.split(":").map(Number);
+  return m * 60 + sec;
+}
+
+function formatSec(total) {
+  const m = Math.floor(total / 60);
+  const s = Math.floor(total % 60);
+  return m + ":" + String(s).padStart(2, "0");
+}
+
+const LIBRARY_SOURCE = [
+  { artist: "Field Marigold", albums: [
+      { name: "Low Tide", tracks: [
+          { title: "Low Tide", duration: "3:12" },
+          { title: "Harbor Light", duration: "4:01" },
+          { title: "Salt Line", duration: "2:47" },
+      ]},
+      { name: "Paper Weather", tracks: [
+          { title: "Paper Weather", duration: "3:34" },
+          { title: "Static Bloom", duration: "3:58" },
+          { title: "Slow Room", duration: "2:59" },
+      ]},
+      { name: "Nine Rooms", tracks: [
+          { title: "Nine Rooms", duration: "4:22" },
+          { title: "Quiet Hour", duration: "3:07" },
+      ]},
+  ]},
+  { artist: "Warm Static", albums: [
+      { name: "Radio Silence", tracks: [
+          { title: "Radio Silence", duration: "3:45" },
+          { title: "Dead Air", duration: "2:58" },
+          { title: "Signal", duration: "3:21" },
+      ]},
+      { name: "Antenna", tracks: [
+          { title: "Antenna", duration: "4:05" },
+          { title: "Frequency", duration: "3:12" },
+      ]},
+  ]},
+  { artist: "Glass Orchard", albums: [
+      { name: "Winter Fruit", tracks: [
+          { title: "Winter Fruit", duration: "3:50" },
+          { title: "Frost", duration: "2:44" },
+          { title: "Thaw", duration: "3:33" },
+      ]},
+      { name: "Orchard Floor", tracks: [
+          { title: "Orchard Floor", duration: "4:10" },
+          { title: "Windfall", duration: "2:55" },
+      ]},
+  ]},
+  { artist: "Slow Harbor", albums: [
+      { name: "Anchor", tracks: [
+          { title: "Anchor", duration: "3:29" },
+          { title: "Drift", duration: "3:41" },
+          { title: "Tide Out", duration: "2:52" },
+      ]},
+  ]},
+];
+
+// Flatten into ARTISTS / ALBUMS / TRACKS with stable ids.
+const ARTISTS = [];
+const ALBUMS = [];
+const TRACKS = [];
+LIBRARY_SOURCE.forEach((a, ai) => {
+  const artistId = "artist-" + ai;
+  let albumCount = 0;
+  let trackCount = 0;
+  a.albums.forEach((al, li) => {
+    const albumId = artistId + "-album-" + li;
+    albumCount++;
+    al.tracks.forEach((t, ti) => {
+      trackCount++;
+      TRACKS.push({
+        id: albumId + "-track-" + ti,
+        title: t.title,
+        duration: t.duration,
+        albumId,
+        albumName: al.name,
+        artistId,
+        artistName: a.artist,
+      });
+    });
+    ALBUMS.push({ id: albumId, name: al.name, artistId, artistName: a.artist, trackCount: al.tracks.length });
+  });
+  ARTISTS.push({ id: artistId, name: a.artist, albumCount, trackCount });
+});
+
+class Component extends DCLogic {
+  state = {
+    view: "artists", // artists | albums | tracks | detail
+    selectedArtistId: null,
+    selectedAlbumId: null,
+    searchQuery: "",
+    currentTrackId: null,
+    isPlaying: false,
+    elapsed: 0,
+  };
+
+  componentDidMount() {
+    this._tick = setInterval(() => {
+      if (this.state.isPlaying) {
+        const track = TRACKS.find(t => t.id === this.state.currentTrackId);
+        if (!track) return;
+        const dur = parseDur(track.duration);
+        this.setState(s => {
+          const next = s.elapsed + 0.25;
+          if (next >= dur) {
+            const idx = TRACKS.findIndex(t => t.id === s.currentTrackId);
+            const nextTrack = TRACKS[(idx + 1) % TRACKS.length];
+            return { currentTrackId: nextTrack.id, elapsed: 0 };
+          }
+          return { elapsed: next };
+        });
+      }
+    }, 250);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this._tick);
+  }
+
+  openArtist(id) {
+    this.setState({ view: "detail", selectedArtistId: id, selectedAlbumId: null });
+  }
+
+  goBack() {
+    this.setState({ view: "artists", selectedArtistId: null, selectedAlbumId: null });
+  }
+
+  selectTab(tab) {
+    this.setState({ view: tab });
+  }
+
+  selectAlbumFilter(id) {
+    this.setState(s => ({ selectedAlbumId: s.selectedAlbumId === id ? null : id }));
+  }
+
+  onSearchChange(e) {
+    this.setState({ searchQuery: e.target.value });
+  }
+
+  playTrack(id) {
+    this.setState({ currentTrackId: id, isPlaying: true, elapsed: 0 });
+  }
+
+  togglePlay() {
+    this.setState(s => ({ isPlaying: !s.isPlaying }));
+  }
+
+  step(dir) {
+    const idx = TRACKS.findIndex(t => t.id === this.state.currentTrackId);
+    const base = idx === -1 ? 0 : idx;
+    const next = TRACKS[(base + dir + TRACKS.length) % TRACKS.length];
+    this.setState({ currentTrackId: next.id, elapsed: 0 });
+  }
+
+  renderVals() {
+    const { view, selectedArtistId, selectedAlbumId, searchQuery, currentTrackId, isPlaying, elapsed } = this.state;
+    const q = searchQuery.trim().toLowerCase();
+    const isNarrow = isPlaying;
+
+    const rootStyle = {
+      width: "100vw",
+      height: "100vh",
+      background: "#e6e6e4",
+      display: "flex",
+      flexDirection: "column",
+      fontFamily: "'IBM Plex Sans', sans-serif",
+      overflow: "hidden",
+    };
+
+    const contentStyle = {
+      flex: 1,
+      minHeight: 0,
+      display: "flex",
+      alignItems: "stretch",
+      padding: "0 10% 32px 10%",
+      gap: "56px",
+    };
+
+    const HEADER_SPACER = "40px";
+
+    const libraryColumnStyle = {
+      flex: 1,
+      minWidth: 0,
+      display: "flex",
+      flexDirection: "column",
+      minHeight: 0,
+    };
+
+    const tabsRowStyle = {
+      display: "grid",
+      gridTemplateColumns: "1fr auto 1fr",
+      alignItems: "center",
+      height: "20px",
+      marginBottom: "20px",
+    };
+
+    const detailSpacerStyle = {
+      height: "20px",
+      marginBottom: "20px",
+    };
+
+    const paperStyle = {
+      flex: 1,
+      minWidth: 0,
+      minHeight: 0,
+      display: "flex",
+      flexDirection: "column",
+      background: "#fbfbfa",
+      borderRadius: "14px",
+      boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 12px 32px rgba(0,0,0,0.08)",
+      overflow: "hidden",
+      transition: "flex 0.45s cubic-bezier(.4,0,.2,1)",
+    };
+
+    const isDetail = view === "detail";
+    const tabDefs = [
+      { key: "artists", label: "Artists" },
+      { key: "albums", label: "Albums" },
+      { key: "tracks", label: "Tracks" },
+    ];
+    const tabItems = tabDefs.map(t => ({
+      label: t.label,
+      onSelect: () => this.selectTab(t.key),
+      style: {
+        fontFamily: "'IBM Plex Mono', monospace",
+        fontSize: "12px",
+        letterSpacing: "0.06em",
+        textTransform: "uppercase",
+        color: view === t.key ? ACCENT : "#9a9a9a",
+        fontWeight: view === t.key ? 600 : 500,
+        cursor: "pointer",
+        paddingBottom: "6px",
+        borderBottom: view === t.key ? "2px solid " + ACCENT : "2px solid transparent",
+      },
+    }));
+
+    const artistCards = ARTISTS.filter(a => !q || a.name.toLowerCase().includes(q)).map(a => ({
+      name: a.name,
+      subtitle: a.albumCount + " albums \u00b7 " + a.trackCount + " tracks",
+      onOpen: () => this.openArtist(a.id),
+      swatchStyle: {
+        width: "100%", aspectRatio: "1 / 1", borderRadius: "10px",
+        background: "#f1f1ef", border: "1px solid #e4e4e2",
+        position: "relative", overflow: "hidden",
+        display: "flex", alignItems: "center", justifyContent: "center",
+      },
+      stripeStyle: { position: "absolute", inset: 0, background: stripe("#dcdcda") },
+    }));
+
+    const libraryAlbumCards = ALBUMS.filter(a => !q || a.name.toLowerCase().includes(q) || a.artistName.toLowerCase().includes(q)).map(a => ({
+      name: a.name,
+      subtitle: a.artistName,
+      onOpen: () => this.openArtist(a.artistId),
+      swatchStyle: {
+        width: "100%", aspectRatio: "1 / 1", borderRadius: "10px",
+        background: "#f1f1ef", border: "1px solid #e4e4e2",
+        position: "relative", overflow: "hidden",
+        display: "flex", alignItems: "center", justifyContent: "center",
+      },
+      stripeStyle: { position: "absolute", inset: 0, background: stripe("#dedede") },
+    }));
+
+    const makeRow = (t, i, opts) => {
+      const playing = t.id === currentTrackId && isPlaying;
+      return {
+        title: t.title,
+        artist: t.artistName,
+        album: t.albumName,
+        duration: t.duration,
+        onPlay: () => this.playTrack(t.id),
+        indexOrIcon: playing ? "\u266A" : String(i + 1).padStart(2, "0"),
+        indexStyle: {
+          width: "26px",
+          fontFamily: "'IBM Plex Mono', monospace",
+          fontSize: "12px",
+          color: playing ? ACCENT : "#c2c2c2",
+          flexShrink: 0,
+        },
+        rowStyle: {
+          display: "flex", alignItems: "center", gap: "14px",
+          padding: "10px 4px", borderBottom: "1px solid #f0f0ef", cursor: "pointer",
+        },
+        titleStyle: {
+          fontFamily: "'IBM Plex Sans', sans-serif", fontSize: "13.5px",
+          fontWeight: playing ? 600 : 500,
+          color: playing ? ACCENT : "#2a2a2a",
+          whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+        },
+      };
+    };
+
+    const libraryTrackRows = TRACKS.filter(t => !q || t.title.toLowerCase().includes(q) || t.artistName.toLowerCase().includes(q) || t.albumName.toLowerCase().includes(q)).map((t, i) => makeRow(t, i));
+
+    const activeArtist = ARTISTS.find(a => a.id === selectedArtistId) || ARTISTS[0];
+    const artistAlbums = ALBUMS.filter(a => a.artistId === activeArtist.id);
+    const artistTracks = TRACKS.filter(t => t.artistId === activeArtist.id);
+    const filteredDetailTracks = selectedAlbumId ? artistTracks.filter(t => t.albumId === selectedAlbumId) : artistTracks;
+
+    const detailAlbumChips = artistAlbums.map(a => {
+      const selected = selectedAlbumId === a.id;
+      return {
+        name: a.name,
+        onSelect: () => this.selectAlbumFilter(a.id),
+        swatchStyle: {
+          width: "84px", height: "84px", borderRadius: "9px",
+          background: "#f1f1ef", border: selected ? "2px solid " + ACCENT : "1px solid #e4e4e2",
+          position: "relative", overflow: "hidden",
+        },
+        stripeStyle: { position: "absolute", inset: 0, background: stripe("#dedede") },
+      };
+    });
+
+    const detailTrackRows = filteredDetailTracks.map((t, i) => makeRow(t, i));
+
+    const currentTrack = TRACKS.find(t => t.id === currentTrackId) || TRACKS[0];
+    const durationSec = parseDur(currentTrack.duration);
+    const progressPct = Math.min(100, (elapsed / durationSec) * 100);
+
+    const playerPanelStyle = {
+      width: "300px",
+      flexShrink: 0,
+      background: "transparent",
+      padding: HEADER_SPACER + " 0 24px 0",
+      display: "flex",
+      flexDirection: "column",
+      gap: "20px",
+      alignSelf: "stretch",
+    };
+
+    const playerArtStyle = {
+      width: "100%", aspectRatio: "1 / 1", borderRadius: "10px",
+      background: "#f1f1ef", border: "1px solid #e4e4e2",
+      position: "relative", overflow: "hidden",
+      display: "flex", alignItems: "center", justifyContent: "center",
+    };
+    const playerStripeStyle = { position: "absolute", inset: 0, background: stripe("#dcdcda") };
+
+    return {
+      rootStyle,
+      contentStyle,
+      libraryColumnStyle,
+      tabsRowStyle,
+      detailSpacerStyle,
+      paperStyle,
+      showLibraryHeader: !isDetail,
+      showDetailHeader: isDetail,
+      showArtistsTab: !isDetail && view === "artists",
+      showAlbumsTab: !isDetail && view === "albums",
+      showTracksTab: !isDetail && view === "tracks",
+      tabItems,
+      searchQuery,
+      onSearchChange: (e) => this.onSearchChange(e),
+      goBack: () => this.goBack(),
+      artistCards,
+      libraryAlbumCards,
+      libraryTrackRows,
+      heroArtStyle: {
+        width: "108px", height: "108px", borderRadius: "10px",
+        background: "#f1f1ef", border: "1px solid #e4e4e2", flexShrink: 0,
+        position: "relative", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden",
+      },
+      stripeOverlayStyle: { position: "absolute", inset: 0, background: stripe("#dcdcda") },
+      activeArtist,
+      artistStats: artistAlbums.length + " albums \u00b7 " + artistTracks.length + " tracks",
+      detailAlbumChips,
+      trackFilterLabel: selectedAlbumId ? (ALBUMS.find(a => a.id === selectedAlbumId) || {}).name : "All",
+      detailTrackRows,
+      isPlaying,
+      playerPanelStyle,
+      playerArtStyle,
+      playerStripeStyle,
+      currentTrack,
+      progressFillStyle: {
+        position: "absolute", left: 0, top: 0, bottom: 0,
+        width: progressPct + "%", background: ACCENT, borderRadius: "2px",
+      },
+      elapsedLabel: formatSec(elapsed),
+      durationLabel: currentTrack.duration,
+      togglePlay: () => this.togglePlay(),
+      prevTrack: () => this.step(-1),
+      nextTrack: () => this.step(1),
+      playButtonStyle: {
+        width: "44px", height: "44px", borderRadius: "50%",
+        background: ACCENT, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center",
+        fontSize: "16px", cursor: "pointer",
+      },
+      playIcon: isPlaying ? "\u23F8" : "\u25B6",
+    };
+  }
+}
+
+</script>
+</body>
+</html>

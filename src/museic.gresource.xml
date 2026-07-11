@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/io/github/drvonmiau/Museic">
+    <file preprocess="xml-stripblanks">window.ui</file>
+    <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
+    <file compressed="true">style.css</file>
+    <file>icons/scalable/actions/museic-pause-symbolic.svg</file>
+    <file>icons/scalable/actions/museic-play-symbolic.svg</file>
+    <file>icons/scalable/actions/museic-repeat-symbolic.svg</file>
+    <file>icons/scalable/actions/museic-seek-backward-symbolic.svg</file>
+    <file>icons/scalable/actions/museic-seek-forward-symbolic.svg</file>
+    <file>icons/scalable/actions/museic-shuffle-symbolic.svg</file>
+    <file>icons/scalable/actions/museic-volume-high-symbolic.svg</file>
+    <file>icons/scalable/actions/museic-volume-low-symbolic.svg</file>
+    <file>icons/scalable/actions/museic-volume-medium-symbolic.svg</file>
+    <file>icons/scalable/actions/museic-volume-muted-symbolic.svg</file>
+  </gresource>
+</gresources>

@@ -1,0 +1,720 @@
+/* Museic — Tempo-inspired theme.
+   Palette/typography follow the Claude Design mockup (design/project/).
+   Font families fall back to system sans/monospace if IBM Plex isn't
+   installed, since the Flatpak doesn't bundle font files. */
+
+@define-color museic_accent #3A3A38;
+
+.root-bg {
+  background-color: #e6e6e4;
+  font-family: "IBM Plex Sans", sans-serif;
+}
+
+/* ---------- custom titlebar ---------- */
+
+
+.titlebar-icon {
+  min-width: 26px;
+  min-height: 26px;
+  padding: 0;
+  color: #8a8a8a;
+}
+
+.titlebar-icon:hover,
+.titlebar-icon:checked {
+  color: #333333;
+  background-color: alpha(#000, 0.06);
+}
+
+/* ---------- titlebar: tabs + search ---------- */
+
+.tab-btn {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: #9a9a9a;
+  padding: 5px 2px 4px 2px;
+  border-radius: 0;
+  border-bottom: 2px solid transparent;
+}
+
+/* Some fonts paint ascenders above their declared line box and GTK clips
+   at the *label's* allocation, so padding on the button can never fix the
+   cropped tops — the label node itself needs the headroom. */
+.tab-btn label,
+.back-btn label {
+  padding-top: 3px;
+}
+
+.tab-btn:hover {
+  color: #333333;
+}
+
+.tab-btn.tab-active {
+  color: @museic_accent;
+  font-weight: 600;
+  border-bottom: 2px solid @museic_accent;
+}
+
+.search-entry {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px;
+  color: #4a4a4a;
+  border: 1px solid #dcdcdc;
+  border-radius: 7px;
+  padding: 7px 12px;
+  background-color: #ffffff;
+  min-height: 0;
+}
+
+/* ---------- paper card ---------- */
+
+.paper {
+  background-color: #fbfbfa;
+  border-radius: 14px 14px 0 0;
+  box-shadow: 0 1px 2px alpha(#000, 0.04), 0 12px 32px alpha(#000, 0.08);
+}
+
+.back-btn {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: #6b6b6b;
+  border: 1px solid #dcdcdc;
+  border-radius: 7px;
+  padding: 7px 14px;
+  background-color: #ffffff;
+}
+
+.back-btn:hover {
+  border-color: #b9b9b9;
+  color: #333333;
+}
+
+.eyebrow {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: #a6a6a6;
+}
+
+.filter-label {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  color: #bcbcbc;
+}
+
+.mono-dim {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px;
+  color: #a3a3a3;
+}
+
+.mono-dim-sm {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  color: #a3a3a3;
+}
+
+/* ---------- artwork swatches ---------- */
+
+.swatch {
+  background-color: #f1f1ef;
+  border: 1px solid #e4e4e2;
+  border-radius: 10px;
+  /* stripe pattern color (picked up by the placeholder drawing) */
+  color: #dcdcda;
+}
+
+.swatch.card-swatch {
+  box-shadow: 0 2px 10px alpha(#000, 0.14), 0 1px 3px alpha(#000, 0.07);
+}
+
+.swatch.chip-selected {
+  border: 2px solid @museic_accent;
+}
+
+.swatch-caption {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: #9b9b9b;
+  background-color: alpha(#fff, 0.75);
+  border-radius: 4px;
+  padding: 3px 8px;
+}
+
+/* ---------- artists / albums grids ---------- */
+
+.card-title {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #2a2a2a;
+}
+
+gridview.card-grid,
+gridview.card-grid > child {
+  background: none;
+  box-shadow: none;
+  outline: none;
+}
+
+gridview.card-grid > child:hover,
+gridview.card-grid > child:selected,
+gridview.card-grid > child:focus {
+  background: none;
+  box-shadow: none;
+}
+
+/* ---------- artist detail ---------- */
+
+.artist-heading {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 30px;
+  font-weight: 600;
+  color: #1c1c1c;
+  letter-spacing: -0.01em;
+}
+
+.chip-label {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 11.5px;
+  color: #4a4a4a;
+}
+
+/* ---------- track rows (library + detail) ---------- */
+
+.track-row {
+  border-bottom: 1px solid #f0f0ef;
+  /* breathing room between the last text line and the divider */
+  padding-top: 3px;
+  padding-bottom: 10px;
+}
+
+.track-row:hover {
+  background-color: #f5f5f5;
+}
+
+.track-list-top-rule {
+  border-top: 1px solid #ececec;
+}
+
+.track-index {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px;
+  color: #c2c2c2;
+}
+
+.track-index.playing {
+  color: @museic_accent;
+}
+
+.track-title {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #2a2a2a;
+}
+
+.track-title.playing {
+  font-weight: 600;
+  color: @museic_accent;
+}
+
+listview > row,
+listview > row:hover,
+listview > row:selected,
+listview > row:focus {
+  background: none;
+  box-shadow: none;
+}
+
+/* Tracks / Favourites tabs: rows sit directly on the paper with a light
+   divider line between them. */
+
+listview.track-cells {
+  background: none;
+}
+
+.track-cells .track-row {
+  background: none;
+  border-radius: 0;
+  border-bottom: 1px solid #ececec;
+  padding: 3px 8px 10px 8px;
+}
+
+.track-cells .track-row:hover {
+  background-color: alpha(#000, 0.03);
+}
+
+/* ---------- player panel ---------- */
+
+.player-panel {
+  background: none;
+}
+
+.upnext-row {
+  padding: 6px 4px;
+  border-radius: 7px;
+}
+
+.upnext-row:hover {
+  background-color: alpha(#000, 0.05);
+}
+
+.upnext-title {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #2a2a2a;
+}
+
+.now-title {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #242422;
+}
+
+.now-artist {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px;
+  color: #8f8f8d;
+}
+
+.time-label {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10.5px;
+  color: #a3a3a1;
+}
+
+.volume-icon {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 13px;
+  color: #8f8f8d;
+}
+
+.transport-btn {
+  color: #6b6b6b;
+  font-size: 18px;
+  padding: 0;
+  min-width: 0;
+  min-height: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+
+.transport-btn:hover {
+  color: #1c1c1c;
+}
+
+.mini-transport {
+  color: #a3a3a1;
+  padding: 2px;
+  min-width: 0;
+  min-height: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+
+.mini-transport:hover {
+  color: #1c1c1c;
+  background: none;
+}
+
+.mini-transport:checked {
+  color: @museic_accent;
+  background: none;
+}
+
+.upnext-clear {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: #a6a6a4;
+  padding: 2px 8px;
+  min-height: 0;
+  border-radius: 6px;
+}
+
+.upnext-clear:hover {
+  color: #333333;
+  background-color: alpha(#000, 0.05);
+}
+
+.play-btn {
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 9999px;
+  background-color: @museic_accent;
+  color: #ffffff;
+  font-size: 16px;
+  padding: 0;
+  box-shadow: none;
+}
+
+.play-btn:hover {
+  background-color: shade(@museic_accent, 1.08);
+}
+
+/* Flatten GtkScale into a thin progress/volume bar with no visible handle,
+   matching the mockup's simple filled-track look, while staying draggable. */
+
+.progress-scale,
+.volume-scale {
+  min-height: 4px;
+  min-width: 4px;
+  padding: 0;
+}
+
+.progress-scale trough,
+.volume-scale trough {
+  min-height: 4px;
+  min-width: 4px;
+  border-radius: 2px;
+  background-color: #d8d8d6;
+  border: none;
+  box-shadow: none;
+}
+
+.progress-scale highlight {
+  min-height: 4px;
+  border-radius: 2px;
+  background-color: @museic_accent;
+  box-shadow: none;
+}
+
+.volume-scale highlight {
+  min-height: 4px;
+  min-width: 4px;
+  border-radius: 2px;
+  background-color: @museic_accent;
+  box-shadow: none;
+}
+
+/* Invisible until hovered, then a small round grab dot appears so it's
+   clear where to drag. */
+.progress-scale slider,
+.volume-scale slider {
+  min-width: 12px;
+  min-height: 12px;
+  margin: -4px;
+  padding: 0;
+  border-radius: 9999px;
+  background-color: @museic_accent;
+  border: 2px solid #fbfbfa;
+  box-shadow: 0 1px 3px alpha(#000, 0.25);
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.progress-scale:hover slider,
+.volume-scale:hover slider,
+.progress-scale slider:active,
+.volume-scale slider:active {
+  opacity: 1;
+}
+
+/* Empty-state call-to-action pill: match the app's dark-grey accent. */
+.empty-cta {
+  background-color: #3a3a38;
+  color: #f6f5f3;
+}
+
+.empty-cta:hover {
+  background-color: #4a4a48;
+}
+
+/* ==================== dark theme ====================
+   The window gains the .dark class (mirroring libadwaita's dark state);
+   everything below overrides the light palette. */
+
+window.dark .root-bg {
+  background-color: #232321;
+}
+
+window.dark .titlebar-icon {
+  color: #9a9a98;
+}
+
+window.dark .titlebar-icon:hover,
+window.dark .titlebar-icon:checked {
+  color: #e8e8e6;
+  background-color: alpha(#fff, 0.08);
+}
+
+window.dark .tab-btn {
+  color: #8a8a88;
+}
+
+window.dark .tab-btn:hover {
+  color: #d5d5d3;
+}
+
+window.dark .tab-btn.tab-active {
+  color: #ececea;
+  border-bottom: 2px solid #ececea;
+}
+
+window.dark .search-entry {
+  background-color: #3a3a38;
+  border-color: #4a4a48;
+  color: #d5d5d3;
+}
+
+window.dark .paper {
+  background-color: #2d2d2b;
+  box-shadow: 0 1px 2px alpha(#000, 0.2), 0 12px 32px alpha(#000, 0.35);
+}
+
+window.dark .back-btn {
+  background-color: #3a3a38;
+  border-color: #4a4a48;
+  color: #b5b5b3;
+}
+
+window.dark .back-btn:hover {
+  border-color: #6a6a68;
+  color: #ececea;
+}
+
+window.dark .eyebrow {
+  color: #7d7d7b;
+}
+
+window.dark .filter-label {
+  color: #6a6a68;
+}
+
+window.dark .mono-dim,
+window.dark .mono-dim-sm {
+  color: #8f8f8d;
+}
+
+window.dark .swatch {
+  background-color: #3a3a38;
+  border-color: #484846;
+  color: #4e4e4c;
+}
+
+window.dark .swatch.chip-selected {
+  border-color: #ececea;
+}
+
+window.dark .swatch-caption {
+  background-color: alpha(#000, 0.55);
+  color: #9f9f9d;
+}
+
+window.dark .card-title {
+  color: #ececea;
+}
+
+window.dark .artist-heading {
+  color: #f2f2f0;
+}
+
+window.dark .chip-label {
+  color: #c0c0be;
+}
+
+window.dark .track-row {
+  border-bottom-color: #3a3a38;
+}
+
+window.dark .track-row:hover {
+  background-color: alpha(#fff, 0.04);
+}
+
+window.dark .track-list-top-rule {
+  border-top-color: #3e3e3c;
+}
+
+window.dark .track-index {
+  color: #6a6a68;
+}
+
+window.dark .track-title {
+  color: #e8e8e6;
+}
+
+window.dark .track-index.playing,
+window.dark .track-title.playing {
+  color: #ffffff;
+}
+
+window.dark .track-cells .track-row {
+  border-bottom: 1px solid #3a3a38;
+}
+
+window.dark .track-cells .track-row:hover {
+  background-color: alpha(#fff, 0.04);
+}
+
+window.dark .now-title {
+  color: #ececea;
+}
+
+window.dark .now-artist,
+window.dark .volume-icon {
+  color: #9a9a98;
+}
+
+window.dark .time-label {
+  color: #8a8a88;
+}
+
+window.dark .transport-btn {
+  color: #b0b0ae;
+}
+
+window.dark .transport-btn:hover {
+  color: #ffffff;
+}
+
+window.dark .play-btn {
+  background-color: #e6e6e4;
+  color: #1c1c1c;
+}
+
+window.dark .play-btn:hover {
+  background-color: #ffffff;
+}
+
+window.dark .progress-scale trough,
+window.dark .volume-scale trough {
+  background-color: #4a4a48;
+}
+
+window.dark .progress-scale highlight {
+  background-color: #e6e6e4;
+}
+
+window.dark .volume-scale highlight {
+  background-color: #e6e6e4;
+}
+
+window.dark .progress-scale slider,
+window.dark .volume-scale slider {
+  background-color: #e6e6e4;
+  border-color: #2d2d2b;
+}
+
+window.dark .upnext-title {
+  color: #e0e0de;
+}
+
+window.dark .upnext-row:hover {
+  background-color: alpha(#fff, 0.06);
+}
+
+window.dark .mini-transport {
+  color: #7a7a78;
+}
+
+window.dark .mini-transport:hover {
+  color: #ffffff;
+}
+
+window.dark .mini-transport:checked {
+  color: #ececea;
+}
+
+window.dark .upnext-clear {
+  color: #8a8a88;
+}
+
+window.dark .upnext-clear:hover {
+  color: #e8e8e6;
+  background-color: alpha(#fff, 0.07);
+}
+
+
+/* separator between the library tabs and the curated tabs */
+.tab-separator {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px;
+  color: #c6c6c4;
+}
+
+window.dark .tab-separator {
+  color: #55554f;
+}
+
+/* hover heart on track rows */
+.heart-btn {
+  opacity: 0;
+  min-width: 0;
+  min-height: 0;
+  padding: 2px;
+  color: #b0b0ae;
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+
+.track-row:hover .heart-btn {
+  opacity: 1;
+}
+
+.heart-btn:hover {
+  color: #3a3a38;
+  background: none;
+}
+
+.heart-btn.faved {
+  opacity: 1;
+  color: @museic_accent;
+}
+
+window.dark .heart-btn {
+  color: #6a6a68;
+}
+
+window.dark .heart-btn:hover {
+  color: #ffffff;
+}
+
+window.dark .heart-btn.faved {
+  color: #ececea;
+}
+
+window.dark .empty-cta {
+  background-color: #ececea;
+  color: #232321;
+}
+
+window.dark .empty-cta:hover {
+  background-color: #ffffff;
+}
+
+/* Up-next row remove button: hidden until the row is hovered. */
+.upnext-remove {
+  opacity: 0;
+  padding: 2px;
+  min-width: 0;
+  min-height: 0;
+  color: #a6a6a4;
+  background: none;
+}
+
+.upnext-row:hover .upnext-remove {
+  opacity: 1;
+}
+
+.upnext-remove:hover {
+  color: #1c1c1c;
+  background: none;
+}
+
+window.dark .upnext-remove {
+  color: #6a6a68;
+}
+
+window.dark .upnext-remove:hover {
+  color: #ececea;
+}

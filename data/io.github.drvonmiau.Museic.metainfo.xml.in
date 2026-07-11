@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+	<id>io.github.drvonmiau.Museic</id>
+	<metadata_license>CC0-1.0</metadata_license>
+	<project_license>GPL-3.0-or-later</project_license>
+	<name>Museic</name>
+	<summary>Browse and play your local music library</summary>
+	<description>
+	  <p>
+	    Museic is a calm, focused player for the music you already have on
+	    disk. Browse by artist, album, or track, and play folders of local
+	    files without an account or a cloud service.
+	  </p>
+	</description>
+	<launchable type="desktop-id">io.github.drvonmiau.Museic.desktop</launchable>
+	<content_rating type="oars-1.1"/>
+	<url type="homepage">https://github.com/drvonmiau/museic</url>
+	<url type="bugtracker">https://github.com/drvonmiau/museic/issues</url>
+	<releases>
+		<release version="0.1.0" date="2026-07-08">
+			<description>
+				<p>Initial release.</p>
+			</description>
+		</release>
+	</releases>
+</component>

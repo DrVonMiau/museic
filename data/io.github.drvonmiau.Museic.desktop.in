@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Museic
+Comment=Browse and play your local music library
+Exec=museic
+Icon=io.github.drvonmiau.Museic
+Terminal=false
+Type=Application
+Categories=GTK;Audio;Player;Music;
+StartupNotify=true
