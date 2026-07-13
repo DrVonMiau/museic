@@ -1,8 +1,7 @@
 application_id = 'io.github.drvonmiau.Museic'
 
 # App icon (512x512): the muse logo tile, cut out with transparent rounded
-# corners. Masters live in design/icon/ (icon-master-tile.png is the
-# uncut original).
+# corners. The uncut master artwork is kept outside the repo.
 png_dir = 'hicolor' / '512x512' / 'apps'
 install_data(
   png_dir / ('@0@.png').format(application_id),

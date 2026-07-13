@@ -6,4 +6,5 @@ Icon=io.github.drvonmiau.Museic
 Terminal=false
 Type=Application
 Categories=GTK;Audio;Player;Music;
+Keywords=music;player;audio;library;mp3;flac;
 StartupNotify=true

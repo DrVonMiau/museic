@@ -1,7 +1,7 @@
 {
     "id": "io.github.drvonmiau.Museic",
     "runtime": "org.gnome.Platform",
-    "runtime-version": "master",
+    "runtime-version": "49",
     "sdk": "org.gnome.Sdk",
     "command": "museic",
     "finish-args": [
@@ -11,7 +11,7 @@
         "--socket=wayland",
         "--socket=pulseaudio",
         "--device=dri",
-        "--filesystem=home",
+        "--filesystem=xdg-music",
         "--filesystem=host-os:ro",
         "--filesystem=xdg-run/gvfs",
         "--filesystem=xdg-run/gvfsd",
@@ -57,6 +57,29 @@
                     "type": "file",
                     "url": "https://files.pythonhosted.org/packages/6d/fd/cef7b2580436910ccd2f8d3deec0f3c81743e15c0eb5b97dde3fbf33c0c8/musicbrainzngs-0.7.1-py2.py3-none-any.whl",
                     "sha256": "e841a8f975104c0a72290b09f59326050194081a5ae62ee512f41915090e1a10"
+                }
+            ]
+        },
+        {
+            "name": "ibm-plex-fonts",
+            "buildsystem": "simple",
+            "build-commands": [
+                "mkdir -p /app/share/fonts",
+                "install -m644 plex-mono/fonts/complete/ttf/IBMPlexMono-Regular.ttf plex-mono/fonts/complete/ttf/IBMPlexMono-Medium.ttf plex-mono/fonts/complete/ttf/IBMPlexMono-SemiBold.ttf plex-mono/fonts/complete/ttf/IBMPlexMono-Bold.ttf /app/share/fonts/",
+                "install -m644 plex-sans/fonts/complete/ttf/IBMPlexSans-Regular.ttf plex-sans/fonts/complete/ttf/IBMPlexSans-Medium.ttf plex-sans/fonts/complete/ttf/IBMPlexSans-SemiBold.ttf plex-sans/fonts/complete/ttf/IBMPlexSans-Bold.ttf /app/share/fonts/"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/IBM/plex/releases/download/%40ibm%2Fplex-mono%401.1.0/ibm-plex-mono.zip",
+                    "sha256": "4bfc936d0e1fd19db6327a3786eabdbc3dc0d464500576f6458f6706df68d26c",
+                    "dest": "plex-mono"
+                },
+                {
+                    "type": "archive",
+                    "url": "https://github.com/IBM/plex/releases/download/%40ibm%2Fplex-sans%401.1.0/ibm-plex-sans.zip",
+                    "sha256": "fb365d910566e6d199cc2c15579a7dd9a267128e18431a394ed81f1970c69200",
+                    "dest": "plex-sans"
                 }
             ]
         },

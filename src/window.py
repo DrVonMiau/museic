@@ -75,6 +75,25 @@ THEME_SCHEMES = {
 
 VIEW_NAMES = ("artists", "albums", "tracks", "favourites", "playlists")
 
+# Fixed spacing scale (px). Every hand-set gap in the app should use one of
+# these; dynamic spacing (paper margins, paper-player gap) lives in
+# _apply_layout_metrics. Documented in the project styleguide.
+SPACE_XS, SPACE_S, SPACE_M, SPACE_L, SPACE_XL = 4, 8, 16, 24, 32
+
+# Web-style hand cursor for anything clickable.
+POINTER_CURSOR = Gdk.Cursor.new_from_name("pointer")
+
+# Sort options per tab group (favourites shares the tracks group).
+SORT_OPTIONS = {
+    "artists": [("Name", "name"), ("Most played", "plays")],
+    "albums": [("Artist", "artist"), ("Title", "title"), ("Year", "year"),
+               ("Most played", "plays")],
+    "tracks": [("Title", "title"), ("Artist", "artist"), ("Album", "album"),
+               ("Most played", "plays"), ("Recently added", "recent")],
+}
+SORT_GROUP_FOR_TAB = {"artists": "artists", "albums": "albums",
+                      "tracks": "tracks", "favourites": "tracks"}
+
 
 
 def _fmt_time(seconds):
@@ -90,6 +109,13 @@ class MusicWindow(Adw.ApplicationWindow):
     root_box = Gtk.Template.Child()
     content_row = Gtk.Template.Child()
     search_toggle_btn = Gtk.Template.Child()
+    sort_btn = Gtk.Template.Child()
+    nav_row = Gtk.Template.Child()
+    titlebar_box = Gtk.Template.Child()
+    titlebar_spacer = Gtk.Template.Child()
+    wc_start = Gtk.Template.Child()
+    wc_end = Gtk.Template.Child()
+    menu_button = Gtk.Template.Child()
 
     middle_stack = Gtk.Template.Child()
     tab_artists = Gtk.Template.Child()
@@ -170,6 +196,11 @@ class MusicWindow(Adw.ApplicationWindow):
         self._surface_height = 0
 
         self._visible_favs = []
+        self._sort = {group: self.settings.get_string(f"sort-{group}")
+                      for group in SORT_OPTIONS}
+        self._track_plays = {}
+        self._artist_plays = {}
+        self._album_plays = {}
 
         self._tab_buttons = {
             "artists": self.tab_artists,
@@ -200,6 +231,58 @@ class MusicWindow(Adw.ApplicationWindow):
         self._restore_queue()
         self._setup_watching()
         self.mpris = MprisServer(self)
+        self._setup_titlebar_sides()
+        self._apply_pointer_cursors()
+
+    @staticmethod
+    def _close_button_is_left(layout):
+        """True if the system's decoration layout puts the close button on
+        the left half (e.g. "close,minimize,maximize:" as on macOS-style
+        setups)."""
+        left = (layout or "").split(":")[0]
+        return "close" in left
+
+    def _setup_titlebar_sides(self):
+        settings = Gtk.Settings.get_default()
+        if settings is not None:
+            settings.connect("notify::gtk-decoration-layout",
+                             lambda *_a: self._apply_titlebar_side())
+        self._apply_titlebar_side()
+
+    def _apply_titlebar_side(self):
+        """Keep the volume + menu group on the OPPOSITE side of the window
+        controls, whichever side the system (or a theme switch) puts them."""
+        settings = Gtk.Settings.get_default()
+        layout = settings.get_property("gtk-decoration-layout") if settings else ""
+        aux = (self.volume_btn, self.volume_scale, self.menu_button)
+        box = self.titlebar_box
+        if self._close_button_is_left(layout):
+            # window buttons on the left -> aux group to the right
+            box.reorder_child_after(self.titlebar_spacer, self.wc_start)
+            previous = self.titlebar_spacer
+        else:
+            # window buttons on the right (GNOME default) -> aux stays left
+            previous = self.wc_start
+        for widget in aux:
+            box.reorder_child_after(widget, previous)
+            previous = widget
+        if not self._close_button_is_left(layout):
+            box.reorder_child_after(self.titlebar_spacer, previous)
+
+    def _apply_pointer_cursors(self):
+        """Give every static clickable a hand cursor. Dynamically created
+        rows/cards set theirs at creation time. Window controls keep the
+        system default on purpose."""
+        def walk(widget):
+            if isinstance(widget, Gtk.WindowControls):
+                return
+            if isinstance(widget, (Gtk.Button, Gtk.Scale)):
+                widget.set_cursor(POINTER_CURSOR)
+            child = widget.get_first_child()
+            while child:
+                walk(child)
+                child = child.get_next_sibling()
+        walk(self)
 
     def current_cover_path(self):
         t = self.queue.current
@@ -335,7 +418,7 @@ class MusicWindow(Adw.ApplicationWindow):
         if width <= 0 or height <= 0:
             return
         margin_y = round(height * 0.05)
-        margin_x = round(width * 0.05)
+        margin_x = max(SPACE_L, round(width * 0.05))
         revealed = self.player_revealer.get_reveal_child()
         if revealed:
             gap = round(width * 0.05)
@@ -346,8 +429,14 @@ class MusicWindow(Adw.ApplicationWindow):
             gap = 0
         self.content_row.set_margin_start(margin_x)
         self.content_row.set_margin_end(margin_x)
-        self.content_row.set_margin_top(margin_y)
+        # The nav band supplies the paper's top gap (fixed spacing tokens).
+        self.content_row.set_margin_top(0)
         self.content_row.set_margin_bottom(0)
+        # The nav band always spans exactly the paper: tabs at the paper's
+        # left edge, sort/search at its right — even when the player panel
+        # is out (its width + gap are added to the end margin).
+        self.nav_row.set_margin_start(margin_x)
+        self.nav_row.set_margin_end(margin_x + (gap + self.PLAYER_WIDTH if revealed else 0))
         self.player_panel.set_size_request(self.PLAYER_WIDTH if revealed else 0, -1)
         self.player_revealer.set_margin_start(gap)
         self.player_revealer.set_margin_bottom(margin_y)
@@ -433,6 +522,12 @@ class MusicWindow(Adw.ApplicationWindow):
             for i in range(1, len(VIEW_NAMES) + 1):
                 app.set_accels_for_action(f"win.tab-{i}", [f"<primary>{i}"])
 
+        sort_mode = Gio.SimpleAction.new_stateful(
+            "sort-mode", GLib.VariantType.new("s"),
+            GLib.Variant("s", self._sort["artists"]))
+        sort_mode.connect("activate", self._on_sort_mode)
+        self.add_action(sort_mode)
+
         sleep_timer = Gio.SimpleAction.new_stateful(
             "sleep-timer", GLib.VariantType.new("i"), GLib.Variant("i", 0))
         sleep_timer.connect("activate", self._on_sleep_timer)
@@ -496,14 +591,51 @@ class MusicWindow(Adw.ApplicationWindow):
     def _card_widget(self):
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10, width_request=192,
                        margin_top=8, margin_bottom=8, margin_start=8, margin_end=8)
+        box.set_cursor(POINTER_CURSOR)
+        box.add_css_class("card-box")
         swatch = Swatch("", size=192)
         swatch.add_css_class("card-swatch")
+
+        text_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        text_col = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2, hexpand=True)
         title = Gtk.Label(xalign=0, ellipsize=Pango.EllipsizeMode.END, css_classes=["card-title"])
         subtitle = Gtk.Label(xalign=0, ellipsize=Pango.EllipsizeMode.END, css_classes=["mono-dim-sm"])
+        text_col.append(title)
+        text_col.append(subtitle)
+
+        # Three-dot menu button: hidden until the card is hovered, so it can't
+        # be clicked before appearing and it only steals text width on hover.
+        menu_btn = Gtk.Button(icon_name="museic-more-symbolic", valign=Gtk.Align.CENTER,
+                              tooltip_text="More", css_classes=["flat", "card-menu-btn"])
+        menu_btn.set_visible(False)
+        menu_btn.set_cursor(POINTER_CURSOR)
+        text_row.append(text_col)
+        text_row.append(menu_btn)
+
         box.append(swatch)
-        box.append(title)
-        box.append(subtitle)
-        box.swatch, box.title, box.subtitle = swatch, title, subtitle
+        box.append(text_row)
+        box.swatch, box.title, box.subtitle, box.menu_btn = swatch, title, subtitle, menu_btn
+        box._menu_open = False
+
+        motion = Gtk.EventControllerMotion()
+        motion.connect("enter", lambda *_a: box.menu_btn.set_visible(True))
+        motion.connect("leave",
+                       lambda *_a: None if box._menu_open else box.menu_btn.set_visible(False))
+        box.add_controller(motion)
+        box._motion = motion
+
+        def on_menu_clicked(btn):
+            box._menu_open = True
+            popover = self._show_item_menu(box, btn, btn.get_width() / 2, btn.get_height())
+
+            def on_closed(_p):
+                box._menu_open = False
+                if not box._motion.get_contains_pointer():
+                    box.menu_btn.set_visible(False)
+
+            popover.connect("closed", on_closed)
+
+        menu_btn.connect("clicked", on_menu_clicked)
         return box
 
     def _bind_artist_card(self, item):
@@ -564,6 +696,8 @@ class MusicWindow(Adw.ApplicationWindow):
         row.append(album_lbl)
         row.append(duration_lbl)
         row.append(heart_btn)
+        row.set_cursor(POINTER_CURSOR)
+        heart_btn.set_cursor(POINTER_CURSOR)
         row.index_lbl, row.title_lbl, row.sub_lbl = index_lbl, title_lbl, sub_lbl
         row.album_lbl, row.duration_lbl, row.heart_btn = album_lbl, duration_lbl, heart_btn
         row._track_id = None
@@ -638,48 +772,60 @@ class MusicWindow(Adw.ApplicationWindow):
             return
         widget._museic_menu_attached = True
         gesture = Gtk.GestureClick(button=3)
+        gesture.connect("pressed",
+                        lambda _g, _n, x, y: self._show_item_menu(widget, widget, x, y))
+        widget.add_controller(gesture)
 
+    def _build_item_menu(self, widget):
+        """Build the context Gio.Menu from widget._menu_* attributes."""
         def payload(**more):
             data = {"kind": widget._menu_kind, "id": widget._menu_item_id}
             data.update(widget._menu_extra)
             data.update(more)
             return GLib.Variant("s", json.dumps(data))
 
-        def on_pressed(_g, _n, x, y):
-            menu = Gio.Menu()
-            section = Gio.Menu()
-            for label, action in widget._menu_entries:
-                if label is None:
-                    menu.append_section(None, section)
-                    section = Gio.Menu()
-                    continue
-                if action == "__playlists__":
-                    sub = Gio.Menu()
-                    for pl in lib.all_playlists(self.con):
-                        mi = Gio.MenuItem.new(pl["name"], None)
-                        mi.set_action_and_target_value("item.add-to-playlist", payload(pl=pl["id"]))
-                        sub.append_item(mi)
-                    mi = Gio.MenuItem.new("New Playlist…", None)
-                    mi.set_action_and_target_value("item.add-to-new-playlist", payload())
+        menu = Gio.Menu()
+        section = Gio.Menu()
+        for label, action in widget._menu_entries:
+            if label is None:
+                menu.append_section(None, section)
+                section = Gio.Menu()
+                continue
+            if action == "__playlists__":
+                sub = Gio.Menu()
+                for pl in lib.all_playlists(self.con):
+                    mi = Gio.MenuItem.new(pl["name"], None)
+                    mi.set_action_and_target_value("item.add-to-playlist", payload(pl=pl["id"]))
                     sub.append_item(mi)
-                    section.append_submenu(label, sub)
-                    continue
-                if action == "toggle-fav":
-                    row = lib.get_track(self.con, widget._menu_item_id)
-                    label = ("Remove from Favourites" if row and row["favorite"]
-                             else "Add to Favourites")
-                mi = Gio.MenuItem.new(label, None)
-                mi.set_action_and_target_value(f"item.{action}", payload())
-                section.append_item(mi)
-            menu.append_section(None, section)
-            popover = Gtk.PopoverMenu.new_from_model(menu)
-            popover.set_has_arrow(False)
-            popover.set_parent(widget)
-            popover.set_pointing_to(Gdk.Rectangle(x=int(x), y=int(y), width=1, height=1))
-            popover.popup()
+                mi = Gio.MenuItem.new("New Playlist…", None)
+                mi.set_action_and_target_value("item.add-to-new-playlist", payload())
+                sub.append_item(mi)
+                section.append_submenu(label, sub)
+                continue
+            if action == "toggle-fav":
+                row = lib.get_track(self.con, widget._menu_item_id)
+                label = ("Remove from Favourites" if row and row["favorite"]
+                         else "Add to Favourites")
+            mi = Gio.MenuItem.new(label, None)
+            mi.set_action_and_target_value(f"item.{action}", payload())
+            section.append_item(mi)
+        menu.append_section(None, section)
+        return menu
 
-        gesture.connect("pressed", on_pressed)
-        widget.add_controller(gesture)
+    def _show_item_menu(self, widget, anchor, x, y):
+        """Pop the context menu for `widget`, parented to `anchor` at (x, y).
+        Returns the popover so callers can react to its close."""
+        popover = Gtk.PopoverMenu.new_from_model(self._build_item_menu(widget))
+        popover.set_has_arrow(False)
+        popover.set_parent(anchor)
+        popover.set_pointing_to(Gdk.Rectangle(x=int(x), y=int(y), width=1, height=1))
+        # Unparent only AFTER the menu action has dispatched: GTK closes the
+        # popover first and resolves the clicked item's action afterwards, so
+        # unparenting directly in "closed" cuts the popover off from the
+        # window's action groups and the click silently does nothing.
+        popover.connect("closed", lambda p: GLib.idle_add(p.unparent))
+        popover.popup()
+        return popover
 
     def _lookup_related(self, kind, item_id, field):
         if kind == "track":
@@ -1173,6 +1319,33 @@ class MusicWindow(Adw.ApplicationWindow):
     def _toast(self, text):
         self.toast_overlay.add_toast(Adw.Toast.new(text))
 
+    def _on_sort_mode(self, action, param):
+        group = SORT_GROUP_FOR_TAB.get(self.view)
+        if not group:
+            return
+        mode = param.get_string()
+        action.set_state(param)
+        self._sort[group] = mode
+        self.settings.set_string(f"sort-{group}", mode)
+        self._apply_filters()
+
+    def _update_sort_button(self):
+        group = SORT_GROUP_FOR_TAB.get(self.view)
+        self.sort_btn.set_visible(group is not None)
+        if group is None:
+            return
+        menu = Gio.Menu()
+        section = Gio.Menu()
+        for label, mode in SORT_OPTIONS[group]:
+            item = Gio.MenuItem.new(label, None)
+            item.set_action_and_target_value("win.sort-mode", GLib.Variant("s", mode))
+            section.append_item(item)
+        menu.append_section("Sort by", section)
+        self.sort_btn.set_menu_model(menu)
+        action = self.lookup_action("sort-mode")
+        if action:
+            action.set_state(GLib.Variant("s", self._sort[group]))
+
     def _select_tab(self, name):
         self.view = name
         self._last_tab = name
@@ -1182,6 +1355,7 @@ class MusicWindow(Adw.ApplicationWindow):
         else:
             self.paper_stack.set_visible_child_name(name)
         self.detail_back_row.set_visible(False)
+        self._update_sort_button()
         for key, btn in self._tab_buttons.items():
             if key == name:
                 btn.add_css_class("tab-active")
@@ -1198,6 +1372,7 @@ class MusicWindow(Adw.ApplicationWindow):
         self._detail_album_filter = select_album_id
         self.paper_stack.set_visible_child_name("detail")
         self.detail_back_row.set_visible(True)
+        self.sort_btn.set_visible(False)
         self._render_detail()
 
     def _open_album(self, album_id):
@@ -1209,6 +1384,7 @@ class MusicWindow(Adw.ApplicationWindow):
         self._detail_album_id = album_id
         self.paper_stack.set_visible_child_name("detail")
         self.detail_back_row.set_visible(True)
+        self.sort_btn.set_visible(False)
         self._render_detail()
 
     def _open_playlist(self, playlist_id):
@@ -1220,6 +1396,7 @@ class MusicWindow(Adw.ApplicationWindow):
         self._detail_playlist_id = playlist_id
         self.paper_stack.set_visible_child_name("detail")
         self.detail_back_row.set_visible(True)
+        self.sort_btn.set_visible(False)
         self._render_detail()
 
     def _go_back(self):
@@ -1345,8 +1522,15 @@ class MusicWindow(Adw.ApplicationWindow):
             swatch.set_path(a["cover_path"] or None)
             if self._detail_album_filter == a["id"]:
                 swatch.add_css_class("chip-selected")
+            # max_width_chars caps the label's *natural* width so a long album
+            # title can't widen its chip past the 84px swatch (the flow box
+            # gives each chip its natural width, so one long title made the
+            # first chip wider than the rest).
             label = Gtk.Label(label=a["title"], justify=Gtk.Justification.CENTER,
-                               ellipsize=Pango.EllipsizeMode.END, css_classes=["chip-label"])
+                               ellipsize=Pango.EllipsizeMode.END,
+                               max_width_chars=8, width_chars=0,
+                               css_classes=["chip-label"])
+            chip.set_cursor(POINTER_CURSOR)
             chip.append(swatch)
             chip.append(label)
             self._attach_menu(chip, "album", a["id"], ALBUM_ENTRIES)
@@ -1404,21 +1588,52 @@ class MusicWindow(Adw.ApplicationWindow):
         self._search_query = entry.get_text().strip().lower()
         self._apply_filters()
 
+    def _sorted_artists(self, artists):
+        if self._sort["artists"] == "plays":
+            return sorted(artists, key=lambda a: (-self._artist_plays.get(a.id, 0),
+                                                  a.name.lower()))
+        return artists  # library order is already by name
+
+    def _sorted_albums(self, albums):
+        mode = self._sort["albums"]
+        if mode == "title":
+            return sorted(albums, key=lambda a: a.title.lower())
+        if mode == "year":
+            return sorted(albums, key=lambda a: (-(a.year or 0), a.artist.lower()))
+        if mode == "plays":
+            return sorted(albums, key=lambda a: (-self._album_plays.get(a.id, 0),
+                                                 a.title.lower()))
+        return albums  # library order is already artist, year
+
+    def _sorted_tracks(self, tracks):
+        mode = self._sort["tracks"]
+        if mode == "artist":
+            return sorted(tracks, key=lambda t: (t.artist.lower(), t.album.lower(),
+                                                 t.track_no))
+        if mode == "album":
+            return sorted(tracks, key=lambda t: (t.album.lower(), t.track_no))
+        if mode == "plays":
+            return sorted(tracks, key=lambda t: (-self._track_plays.get(t.id, 0),
+                                                 t.title.lower()))
+        if mode == "recent":
+            return sorted(tracks, key=lambda t: -t.id)
+        return tracks  # library order is already by title
+
     def _apply_filters(self):
         q = self._search_query
         self.artist_store.remove_all()
-        for a in self._artists_all:
+        for a in self._sorted_artists(self._artists_all):
             if not q or q in a.name.lower():
                 self.artist_store.append(a)
 
         self.album_store.remove_all()
-        for a in self._albums_all:
+        for a in self._sorted_albums(self._albums_all):
             if not q or q in a.title.lower() or q in a.artist.lower():
                 self.album_store.append(a)
 
         self.track_store.remove_all()
         self._visible_tracks = [
-            t for t in self._tracks_all
+            t for t in self._sorted_tracks(self._tracks_all)
             if not q or q in t.title.lower() or q in t.artist.lower() or q in t.album.lower()
         ]
         for t in self._visible_tracks:
@@ -1510,6 +1725,14 @@ class MusicWindow(Adw.ApplicationWindow):
                      cover_path=r["cover_path"] or "")
             for r in lib.all_playlists(self.con)
         ]
+        self._track_plays = dict(self.con.execute(
+            "SELECT track_id, COUNT(*) FROM plays GROUP BY track_id").fetchall())
+        self._artist_plays = dict(self.con.execute(
+            """SELECT t.artist_id, COUNT(*) FROM plays p
+               JOIN tracks t ON t.id = p.track_id GROUP BY t.artist_id""").fetchall())
+        self._album_plays = dict(self.con.execute(
+            """SELECT t.album_id, COUNT(*) FROM plays p
+               JOIN tracks t ON t.id = p.track_id GROUP BY t.album_id""").fetchall())
         self._prune_queue()
         self._apply_filters()
         if self.view == "detail" and (self._detail_artist_id is not None
@@ -1698,9 +1921,13 @@ class MusicWindow(Adw.ApplicationWindow):
             index_lbl = Gtk.Label(label=f"{i + 1:02d}", width_chars=2, xalign=0,
                                    css_classes=["track-index"])
             text_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=1, hexpand=True)
+            # max_width_chars caps the label's *natural* width so a long title
+            # can't stretch the fixed-width player panel (see PLAYER_WIDTH).
             title_lbl = Gtk.Label(label=t.title, xalign=0, ellipsize=Pango.EllipsizeMode.END,
+                                   max_width_chars=18, width_chars=0,
                                    css_classes=["upnext-title"])
             sub_lbl = Gtk.Label(label=t.artist, xalign=0, ellipsize=Pango.EllipsizeMode.END,
+                                 max_width_chars=18, width_chars=0,
                                  css_classes=["mono-dim-sm"])
             text_box.append(title_lbl)
             text_box.append(sub_lbl)
@@ -1709,6 +1936,8 @@ class MusicWindow(Adw.ApplicationWindow):
                                      tooltip_text="Remove from queue",
                                      css_classes=["flat", "upnext-remove"])
             remove_btn.connect("clicked", lambda _b, pos=i: self._remove_upcoming(pos))
+            row.set_cursor(POINTER_CURSOR)
+            remove_btn.set_cursor(POINTER_CURSOR)
             row.append(index_lbl)
             row.append(text_box)
             row.append(duration_lbl)
@@ -1798,6 +2027,7 @@ class MusicWindow(Adw.ApplicationWindow):
         else:
             level = "high"
         self.volume_btn.set_icon_name(f"museic-volume-{level}-symbolic")
+        self.volume_btn.set_tooltip_text("Unmute" if level == "muted" else "Mute")
 
     def _tick(self):
         if self.queue.current:

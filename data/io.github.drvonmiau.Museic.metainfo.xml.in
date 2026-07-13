@@ -4,20 +4,57 @@
 	<metadata_license>CC0-1.0</metadata_license>
 	<project_license>GPL-3.0-or-later</project_license>
 	<name>Museic</name>
-	<summary>Browse and play your local music library</summary>
+	<summary>Play your local music</summary>
+	<developer id="io.github.drvonmiau">
+		<name>Daniel</name>
+	</developer>
 	<description>
 	  <p>
 	    Museic is a calm, focused player for the music you already have on
-	    disk. Browse by artist, album, or track, and play folders of local
-	    files without an account or a cloud service.
+	    disk. Browse by artist, album or track, keep favourites and playlists,
+	    and play without an account or a cloud service.
 	  </p>
+	  <p>Features:</p>
+	  <ul>
+	    <li>Gapless playback with shuffle, repeat and an editable queue</li>
+	    <li>Cover art from your files' own tags, or MusicBrainz as a fallback</li>
+	    <li>Tag editing for tracks, albums and artists, written back to the files</li>
+	    <li>Media-key, sound-menu and lock-screen controls (MPRIS)</li>
+	    <li>Folder watching, sleep timer, light and dark themes</li>
+	  </ul>
 	</description>
 	<launchable type="desktop-id">io.github.drvonmiau.Museic.desktop</launchable>
 	<content_rating type="oars-1.1"/>
-	<url type="homepage">https://github.com/drvonmiau/museic</url>
-	<url type="bugtracker">https://github.com/drvonmiau/museic/issues</url>
+	<branding>
+		<color type="primary" scheme_preference="light">#e6e6e4</color>
+		<color type="primary" scheme_preference="dark">#232321</color>
+	</branding>
+	<url type="homepage">https://github.com/DrVonMiau/museic</url>
+	<url type="bugtracker">https://github.com/DrVonMiau/museic/issues</url>
+	<url type="vcs-browser">https://github.com/DrVonMiau/museic</url>
+	<screenshots>
+		<screenshot type="default">
+			<image>https://raw.githubusercontent.com/DrVonMiau/museic/main/data/screenshots/albums.png</image>
+			<caption>Your albums on a clean paper card</caption>
+		</screenshot>
+		<screenshot>
+			<image>https://raw.githubusercontent.com/DrVonMiau/museic/main/data/screenshots/playing.png</image>
+			<caption>The floating player with the up-next queue</caption>
+		</screenshot>
+		<screenshot>
+			<image>https://raw.githubusercontent.com/DrVonMiau/museic/main/data/screenshots/dark.png</image>
+			<caption>Museic in the dark theme</caption>
+		</screenshot>
+	</screenshots>
+	<requires>
+		<display_length compare="ge">768</display_length>
+	</requires>
+	<supports>
+		<control>keyboard</control>
+		<control>pointing</control>
+	</supports>
 	<releases>
-		<release version="0.1.0" date="2026-07-08">
+		<release version="0.1.0" date="2026-07-11">
 			<description>
 				<p>Initial release.</p>
 			</description>

@@ -49,6 +49,18 @@
 			<summary>Watch music folders</summary>
 			<description>Automatically rescan the library when files change in the music folders.</description>
 		</key>
+		<key name="sort-artists" type="s">
+			<default>'name'</default>
+			<summary>Artists tab sort order</summary>
+		</key>
+		<key name="sort-albums" type="s">
+			<default>'artist'</default>
+			<summary>Albums tab sort order</summary>
+		</key>
+		<key name="sort-tracks" type="s">
+			<default>'title'</default>
+			<summary>Tracks/Favourites sort order</summary>
+		</key>
 		<key name="notify-on-track-change" type="b">
 			<default>true</default>
 			<summary>Track change notifications</summary>

@@ -1,9 +1,14 @@
 /* Museic — Tempo-inspired theme.
-   Palette/typography follow the Claude Design mockup (design/project/).
-   Font families fall back to system sans/monospace if IBM Plex isn't
-   installed, since the Flatpak doesn't bundle font files. */
+   Palette/typography follow the original design mockup; the full design
+   system is documented in the project styleguide (kept outside the repo).
+   IBM Plex Sans/Mono are bundled by the Flatpak manifest; the generic
+   fallbacks only matter for non-Flatpak development runs. */
 
 @define-color museic_accent #3A3A38;
+/* Secondary accent: the lavender of the icon's drape. Used sparingly —
+   favourites and the playing marker only. */
+@define-color museic_lavender #9d87c6;
+@define-color museic_lavender_dark #b6a3d8;
 
 .root-bg {
   background-color: #e6e6e4;
@@ -129,6 +134,29 @@
 
 .swatch.card-swatch {
   box-shadow: 0 2px 10px alpha(#000, 0.14), 0 1px 3px alpha(#000, 0.07);
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+/* Hovering a card lifts its artwork: a small scale + a deeper shadow.
+   The translate keeps the ~192px swatch's scale centred (GTK transforms
+   from the top-left, and translate needs px units — not percentages). */
+.card-box:hover .card-swatch {
+  transform: translate(-2px, -2px) scale(1.02);
+  box-shadow: 0 10px 26px alpha(#000, 0.22), 0 3px 8px alpha(#000, 0.12);
+}
+
+/* Three-dot menu button on cards. */
+.card-menu-btn {
+  min-width: 24px;
+  min-height: 24px;
+  padding: 0;
+  color: #9a9a98;
+  background: none;
+}
+
+.card-menu-btn:hover {
+  color: #1c1c1c;
+  background-color: alpha(#000, 0.06);
 }
 
 .swatch.chip-selected {
@@ -208,7 +236,7 @@ gridview.card-grid > child:focus {
 }
 
 .track-index.playing {
-  color: @museic_accent;
+  color: @museic_lavender;
 }
 
 .track-title {
@@ -266,7 +294,7 @@ listview.track-cells {
 
 .upnext-title {
   font-family: "IBM Plex Sans", sans-serif;
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 500;
   color: #2a2a2a;
 }
@@ -288,12 +316,6 @@ listview.track-cells {
   font-family: "IBM Plex Mono", monospace;
   font-size: 10.5px;
   color: #a3a3a1;
-}
-
-.volume-icon {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 13px;
-  color: #8f8f8d;
 }
 
 .transport-btn {
@@ -338,7 +360,7 @@ listview.track-cells {
   color: #a6a6a4;
   padding: 2px 8px;
   min-height: 0;
-  border-radius: 6px;
+  border-radius: 7px;
 }
 
 .upnext-clear:hover {
@@ -362,36 +384,33 @@ listview.track-cells {
 }
 
 /* Flatten GtkScale into a thin progress/volume bar with no visible handle,
-   matching the mockup's simple filled-track look, while staying draggable. */
+   matching the mockup's simple filled-track look, while staying draggable.
+   GTK quirk: the visible trough height follows the hidden grab dot's box,
+   so the dot's min-size is kept tiny (6px, -2px margins) — negative
+   margins alone can't thin the bar. */
 
 .progress-scale,
 .volume-scale {
-  min-height: 4px;
+  min-height: 2px;
   min-width: 4px;
-  padding: 0;
+  /* hairline bar, but a comfortable click/drag target */
+  padding: 8px 0;
 }
 
 .progress-scale trough,
 .volume-scale trough {
-  min-height: 4px;
+  min-height: 2px;
   min-width: 4px;
-  border-radius: 2px;
+  border-radius: 1px;
   background-color: #d8d8d6;
   border: none;
   box-shadow: none;
 }
 
-.progress-scale highlight {
-  min-height: 4px;
-  border-radius: 2px;
-  background-color: @museic_accent;
-  box-shadow: none;
-}
-
+.progress-scale highlight,
 .volume-scale highlight {
-  min-height: 4px;
-  min-width: 4px;
-  border-radius: 2px;
+  min-height: 2px;
+  border-radius: 1px;
   background-color: @museic_accent;
   box-shadow: none;
 }
@@ -400,13 +419,13 @@ listview.track-cells {
    clear where to drag. */
 .progress-scale slider,
 .volume-scale slider {
-  min-width: 12px;
-  min-height: 12px;
-  margin: -4px;
+  min-width: 6px;
+  min-height: 6px;
+  margin: -2px;
   padding: 0;
   border-radius: 9999px;
   background-color: @museic_accent;
-  border: 2px solid #fbfbfa;
+  border: 1px solid #fbfbfa;
   box-shadow: 0 1px 3px alpha(#000, 0.25);
   opacity: 0;
   transition: opacity 120ms ease;
@@ -542,7 +561,10 @@ window.dark .track-title {
   color: #e8e8e6;
 }
 
-window.dark .track-index.playing,
+window.dark .track-index.playing {
+  color: @museic_lavender_dark;
+}
+
 window.dark .track-title.playing {
   color: #ffffff;
 }
@@ -559,8 +581,7 @@ window.dark .now-title {
   color: #ececea;
 }
 
-window.dark .now-artist,
-window.dark .volume-icon {
+window.dark .now-artist {
   color: #9a9a98;
 }
 
@@ -668,7 +689,7 @@ window.dark .tab-separator {
 
 .heart-btn.faved {
   opacity: 1;
-  color: @museic_accent;
+  color: @museic_lavender;
 }
 
 window.dark .heart-btn {
@@ -680,7 +701,16 @@ window.dark .heart-btn:hover {
 }
 
 window.dark .heart-btn.faved {
-  color: #ececea;
+  color: @museic_lavender_dark;
+}
+
+window.dark .card-menu-btn {
+  color: #8a8a88;
+}
+
+window.dark .card-menu-btn:hover {
+  color: #ffffff;
+  background-color: alpha(#fff, 0.08);
 }
 
 window.dark .empty-cta {
