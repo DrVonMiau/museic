@@ -512,7 +512,10 @@ class MusicWindow(Adw.ApplicationWindow):
 
         app = self.get_application()
         if app is not None:
-            app.set_accels_for_action("win.play-pause", ["space"])
+            # NOTE: space is deliberately NOT a global accelerator - a global
+            # accel fires even while typing in the search box (the entry never
+            # receives the key). Instead a BUBBLE-phase key controller below
+            # toggles play/pause only when no text field consumed the press.
             app.set_accels_for_action("win.next-track", ["<primary>Right"])
             app.set_accels_for_action("win.prev-track", ["<primary>Left"])
             app.set_accels_for_action("win.find", ["<primary>f"])
@@ -521,6 +524,15 @@ class MusicWindow(Adw.ApplicationWindow):
             app.set_accels_for_action("win.mute", ["<primary>m"])
             for i in range(1, len(VIEW_NAMES) + 1):
                 app.set_accels_for_action(f"win.tab-{i}", [f"<primary>{i}"])
+
+        # Space toggles play/pause everywhere EXCEPT while typing in a text
+        # field. CAPTURE phase runs before the focused widget: buttons/cards
+        # never get to treat space as a click (Enter still activates them),
+        # and _on_space_pressed steps aside when the focus is editable text.
+        space_ctl = Gtk.EventControllerKey()
+        space_ctl.set_propagation_phase(Gtk.PropagationPhase.CAPTURE)
+        space_ctl.connect("key-pressed", self._on_space_pressed)
+        self.add_controller(space_ctl)
 
         sort_mode = Gio.SimpleAction.new_stateful(
             "sort-mode", GLib.VariantType.new("s"),
@@ -1981,6 +1993,20 @@ class MusicWindow(Adw.ApplicationWindow):
         if tracks:
             self.queue.play(tracks)
             self._start_current()
+
+    def _on_space_pressed(self, _ctl, keyval, _keycode, state):
+        if keyval != Gdk.KEY_space:
+            return False
+        if state & (Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.ALT_MASK
+                    | Gdk.ModifierType.SHIFT_MASK):
+            return False
+        # Never steal space from a text field (the focused widget inside an
+        # entry is a Gtk.Text; TextView/Editable cover any future editors).
+        focus = self.get_focus()
+        if isinstance(focus, (Gtk.Text, Gtk.TextView)) or isinstance(focus, Gtk.Editable):
+            return False
+        self._toggle_play()
+        return True
 
     def _toggle_play(self):
         if not self.queue.current:
