@@ -36,7 +36,22 @@ tracks, favourites and playlists — and gets the details right:
 - Folder watching, a sleep timer, full keyboard control, and light and dark
   themes that follow your system
 
-## Building
+## Install
+
+Grab the latest `.flatpak` bundle from the
+[**Releases**](https://github.com/DrVonMiau/museic/releases) page, then
+install and run it:
+
+```sh
+flatpak install --user io.github.drvonmiau.Museic.flatpak
+flatpak run io.github.drvonmiau.Museic
+```
+
+The first command may offer to pull in the GNOME runtime the app needs —
+say yes. You only need [Flatpak](https://flatpak.org/setup/) installed,
+which most Linux distributions already have.
+
+## Building from source
 
 Open the project in **GNOME Builder** and press Run — the included Flatpak
 manifest (`io.github.drvonmiau.Museic.json`) takes care of everything,
