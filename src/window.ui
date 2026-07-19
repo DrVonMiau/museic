@@ -93,7 +93,7 @@
              changes), so it never crowds the close/min/max buttons. -->
         <child>
           <object class="GtkWindowHandle" id="titlebar_handle">
-            <property name="height-request">34</property>
+            <property name="height-request">48</property>
             <property name="child">
               <object class="GtkBox" id="titlebar_box">
                 <property name="orientation">horizontal</property>
@@ -191,59 +191,67 @@
                     <property name="child">
                       <object class="GtkBox" id="tabs_box">
                         <property name="orientation">horizontal</property>
-                        <property name="spacing">22</property>
+                        <property name="spacing">12</property>
                         <property name="halign">start</property>
                         <child>
-                          <object class="GtkButton" id="tab_artists">
-                            <property name="label" translatable="yes">Artists</property>
+                          <object class="GtkBox">
+                            <property name="orientation">horizontal</property>
                             <style>
-                              <class name="flat"/>
-                              <class name="tab-btn"/>
+                              <class name="tab-group"/>
                             </style>
+                            <child>
+                              <object class="GtkButton" id="tab_artists">
+                                <property name="label" translatable="yes">Artists</property>
+                                <style>
+                                  <class name="flat"/>
+                                  <class name="tab-btn"/>
+                                </style>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="tab_albums">
+                                <property name="label" translatable="yes">Albums</property>
+                                <style>
+                                  <class name="flat"/>
+                                  <class name="tab-btn"/>
+                                </style>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="tab_tracks">
+                                <property name="label" translatable="yes">Tracks</property>
+                                <style>
+                                  <class name="flat"/>
+                                  <class name="tab-btn"/>
+                                </style>
+                              </object>
+                            </child>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkButton" id="tab_albums">
-                            <property name="label" translatable="yes">Albums</property>
+                          <object class="GtkBox">
+                            <property name="orientation">horizontal</property>
                             <style>
-                              <class name="flat"/>
-                              <class name="tab-btn"/>
+                              <class name="tab-group"/>
                             </style>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="tab_tracks">
-                            <property name="label" translatable="yes">Tracks</property>
-                            <style>
-                              <class name="flat"/>
-                              <class name="tab-btn"/>
-                            </style>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="label">—</property>
-                            <style>
-                              <class name="tab-separator"/>
-                            </style>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="tab_favourites">
-                            <property name="label" translatable="yes">Favourites</property>
-                            <style>
-                              <class name="flat"/>
-                              <class name="tab-btn"/>
-                            </style>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="tab_playlists">
-                            <property name="label" translatable="yes">Playlists</property>
-                            <style>
-                              <class name="flat"/>
-                              <class name="tab-btn"/>
-                            </style>
+                            <child>
+                              <object class="GtkButton" id="tab_favourites">
+                                <property name="label" translatable="yes">Favourites</property>
+                                <style>
+                                  <class name="flat"/>
+                                  <class name="tab-btn"/>
+                                </style>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="tab_playlists">
+                                <property name="label" translatable="yes">Playlists</property>
+                                <style>
+                                  <class name="flat"/>
+                                  <class name="tab-btn"/>
+                                </style>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
