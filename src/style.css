@@ -34,6 +34,19 @@ link,
   color: @museic_lavender;
 }
 
+/* System switches and checks pick up the lavender accent instead of the
+   stock Adwaita blue. A single shade serves both themes (as Adwaita's own
+   accent blue does) because the preferences dialog is a separate window
+   the .dark scoping below can't reach. */
+switch:checked {
+  background-color: @museic_lavender;
+}
+
+checkbutton check:checked,
+checkbutton radio:checked {
+  background-color: @museic_lavender;
+}
+
 /* ---------- custom titlebar ---------- */
 
 

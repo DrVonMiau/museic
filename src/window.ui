@@ -177,7 +177,7 @@
             <property name="orientation">horizontal</property>
             <property name="spacing">8</property>
             <property name="margin-top">24</property>
-            <property name="margin-bottom">8</property>
+            <property name="margin-bottom">18</property>
             <property name="valign">center</property>
             <child>
               <object class="GtkStack" id="middle_stack">
