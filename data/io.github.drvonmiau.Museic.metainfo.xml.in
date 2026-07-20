@@ -26,8 +26,8 @@
 	<launchable type="desktop-id">io.github.drvonmiau.Museic.desktop</launchable>
 	<content_rating type="oars-1.1"/>
 	<branding>
-		<color type="primary" scheme_preference="light">#e6e6e4</color>
-		<color type="primary" scheme_preference="dark">#232321</color>
+		<color type="primary" scheme_preference="light">#e2dbf1</color>
+		<color type="primary" scheme_preference="dark">#312b45</color>
 	</branding>
 	<url type="homepage">https://github.com/DrVonMiau/museic</url>
 	<url type="bugtracker">https://github.com/DrVonMiau/museic/issues</url>
@@ -54,6 +54,17 @@
 		<control>pointing</control>
 	</supports>
 	<releases>
+		<release version="0.2.0" date="2026-07-20">
+			<description>
+				<p>A visual refresh:</p>
+				<ul>
+					<li>New segmented pill-style view tabs</li>
+					<li>Colors now follow the system Adwaita palette in both themes, with lavender accents and gold favourites</li>
+					<li>More breathing room in the titlebar and around the tabs</li>
+					<li>The original statue-and-lyre app icon is back</li>
+				</ul>
+			</description>
+		</release>
 		<release version="0.1.1" date="2026-07-14">
 			<description>
 				<p>Fix: typing a space in the search box no longer pauses playback.</p>
