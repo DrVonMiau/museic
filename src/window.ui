@@ -62,7 +62,7 @@
         <attribute name="action">win.show-help-overlay</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">About Museic</attribute>
+        <attribute name="label" translatable="yes">About Lyre</attribute>
         <attribute name="action">app.about</attribute>
       </item>
       <item>
@@ -77,7 +77,7 @@
     <property name="default-height">740</property>
     <property name="width-request">720</property>
     <property name="height-request">520</property>
-    <property name="title">Museic</property>
+    <property name="title">Lyre</property>
     <property name="content">
       <object class="AdwToastOverlay" id="toast_overlay">
         <property name="child">
@@ -111,7 +111,7 @@
                   <object class="GtkButton" id="volume_btn">
                     <property name="tooltip-text" translatable="yes">Mute</property>
                     <property name="valign">center</property>
-                    <property name="icon-name">museic-volume-high-symbolic</property>
+                    <property name="icon-name">lyre-volume-high-symbolic</property>
                     <property name="action-name">win.mute</property>
                     <style>
                       <class name="flat"/>
@@ -277,7 +277,7 @@
             </child>
             <child>
               <object class="GtkMenuButton" id="sort_btn">
-                <property name="icon-name">museic-sort-symbolic</property>
+                <property name="icon-name">lyre-sort-symbolic</property>
                 <property name="tooltip-text" translatable="yes">Sort</property>
                 <property name="valign">center</property>
                 <style>
@@ -367,7 +367,7 @@
                           <object class="AdwStatusPage">
                             <property name="icon-name">folder-music-symbolic</property>
                             <property name="title" translatable="yes">No Music Yet</property>
-                            <property name="description" translatable="yes">Add a folder and Museic will scan it for music.</property>
+                            <property name="description" translatable="yes">Add a folder and Lyre will scan it for music.</property>
                             <property name="child">
                               <object class="GtkButton">
                                 <property name="label" translatable="yes">Add Music Folder…</property>
@@ -752,7 +752,7 @@
                             </style>
                             <child>
                               <object class="GtkImage">
-                                <property name="icon-name">museic-shuffle-symbolic</property>
+                                <property name="icon-name">lyre-shuffle-symbolic</property>
                                 <property name="pixel-size">14</property>
                               </object>
                             </child>
@@ -766,7 +766,7 @@
                             </style>
                             <child>
                               <object class="GtkImage">
-                                <property name="icon-name">museic-seek-backward-symbolic</property>
+                                <property name="icon-name">lyre-seek-backward-symbolic</property>
                                 <property name="pixel-size">18</property>
                               </object>
                             </child>
@@ -780,7 +780,7 @@
                             </style>
                             <child>
                               <object class="GtkImage" id="play_icon">
-                                <property name="icon-name">museic-play-symbolic</property>
+                                <property name="icon-name">lyre-play-symbolic</property>
                                 <property name="pixel-size">18</property>
                               </object>
                             </child>
@@ -794,7 +794,7 @@
                             </style>
                             <child>
                               <object class="GtkImage">
-                                <property name="icon-name">museic-seek-forward-symbolic</property>
+                                <property name="icon-name">lyre-seek-forward-symbolic</property>
                                 <property name="pixel-size">18</property>
                               </object>
                             </child>
@@ -810,7 +810,7 @@
                             </style>
                             <child>
                               <object class="GtkImage">
-                                <property name="icon-name">museic-repeat-symbolic</property>
+                                <property name="icon-name">lyre-repeat-symbolic</property>
                                 <property name="pixel-size">14</property>
                               </object>
                             </child>

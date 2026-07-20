@@ -1,9 +1,9 @@
 pkgdatadir = get_option('prefix') / get_option('datadir') / meson.project_name()
-moduledir = pkgdatadir / 'museic'
+moduledir = pkgdatadir / 'lyre'
 gnome = import('gnome')
 
-gnome.compile_resources('museic',
-  'museic.gresource.xml',
+gnome.compile_resources('lyre',
+  'lyre.gresource.xml',
   gresource_bundle: true,
   install: true,
   install_dir: pkgdatadir,
@@ -18,15 +18,15 @@ conf.set('localedir', get_option('prefix') / get_option('localedir'))
 conf.set('pkgdatadir', pkgdatadir)
 
 configure_file(
-  input: 'museic.in',
-  output: 'museic',
+  input: 'lyre.in',
+  output: 'lyre',
   configuration: conf,
   install: true,
   install_dir: get_option('bindir'),
   install_mode: 'r-xr-xr-x'
 )
 
-museic_sources = [
+lyre_sources = [
   '__init__.py',
   'main.py',
   'window.py',
@@ -38,4 +38,4 @@ museic_sources = [
   'widgets.py',
 ]
 
-install_data(museic_sources, install_dir: moduledir)
+install_data(lyre_sources, install_dir: moduledir)

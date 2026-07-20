@@ -1,8 +1,8 @@
 [Desktop Entry]
-Name=Museic
+Name=Lyre
 Comment=Browse and play your local music library
-Exec=museic
-Icon=io.github.drvonmiau.Museic
+Exec=lyre
+Icon=io.github.drvonmiau.Lyre
 Terminal=false
 Type=Application
 Categories=GTK;Audio;Player;Music;

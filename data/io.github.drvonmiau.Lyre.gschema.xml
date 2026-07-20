@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schemalist gettext-domain="museic">
-	<schema id="io.github.drvonmiau.Museic" path="/io/github/drvonmiau/Museic/">
+<schemalist gettext-domain="lyre">
+	<schema id="io.github.drvonmiau.Lyre" path="/io/github/drvonmiau/Lyre/">
 		<key name="theme" type="s">
 			<choices>
 				<choice value="light"/>

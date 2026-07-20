@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="data/icons/hicolor/512x512/apps/io.github.drvonmiau.Museic.png" width="128" alt="Museic icon">
+  <img src="data/icons/hicolor/512x512/apps/io.github.drvonmiau.Lyre.png" width="128" alt="Lyre icon">
 </p>
 
-<h1 align="center">Museic</h1>
+<h1 align="center">Lyre</h1>
 
 <p align="center">
   A calm, focused player for the music you already own —<br>
@@ -10,17 +10,17 @@
 </p>
 
 <p align="center">
-  <img src="data/screenshots/playing.png" width="720" alt="Museic playing an album">
+  <img src="data/screenshots/playing.png" width="720" alt="Lyre playing an album">
 </p>
 
 <p align="center">
   <img src="data/screenshots/albums.png" width="352" alt="The albums grid">
-  <img src="data/screenshots/dark.png" width="352" alt="Museic in the dark theme">
+  <img src="data/screenshots/dark.png" width="352" alt="Lyre in the dark theme">
 </p>
 
 ## What it does
 
-Museic scans your music folders into a local library — artists, albums,
+Lyre scans your music folders into a local library — artists, albums,
 tracks, favourites and playlists — and gets the details right:
 
 - **Gapless playback** with shuffle, repeat and an editable Up&nbsp;Next queue
@@ -39,12 +39,12 @@ tracks, favourites and playlists — and gets the details right:
 ## Install
 
 Grab the latest `.flatpak` bundle from the
-[**Releases**](https://github.com/DrVonMiau/museic/releases) page, then
+[**Releases**](https://github.com/DrVonMiau/lyre/releases) page, then
 install and run it:
 
 ```sh
-flatpak install --user io.github.drvonmiau.Museic.flatpak
-flatpak run io.github.drvonmiau.Museic
+flatpak install --user io.github.drvonmiau.Lyre.flatpak
+flatpak run io.github.drvonmiau.Lyre
 ```
 
 The first command may offer to pull in the GNOME runtime the app needs —
@@ -54,17 +54,17 @@ which most Linux distributions already have.
 ## Building from source
 
 Open the project in **GNOME Builder** and press Run — the included Flatpak
-manifest (`io.github.drvonmiau.Museic.json`) takes care of everything,
+manifest (`io.github.drvonmiau.Lyre.json`) takes care of everything,
 including the IBM Plex fonts the design uses.
 
 Or with flatpak-builder directly:
 
 ```sh
-flatpak-builder --user --install --force-clean _flatpak io.github.drvonmiau.Museic.json
-flatpak run io.github.drvonmiau.Museic
+flatpak-builder --user --install --force-clean _flatpak io.github.drvonmiau.Lyre.json
+flatpak run io.github.drvonmiau.Lyre
 ```
 
 ## License
 
-Museic is free software, released under the
+Lyre is free software, released under the
 [GNU GPL 3.0 or later](COPYING).
