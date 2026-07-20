@@ -15,12 +15,12 @@ import musicbrainzngs as mb
 
 from . import library as lib
 
-mb.set_useragent("Museic", "1.0", "https://github.com/DrVonMiau/museic")
+mb.set_useragent("Lyre", "1.0", "https://github.com/DrVonMiau/lyre")
 mb.set_rate_limit(True)
 
 
 def _get(url):
-    req = urllib.request.Request(url, headers={"User-Agent": "Museic/1.0"})
+    req = urllib.request.Request(url, headers={"User-Agent": "Lyre/1.0"})
     with urllib.request.urlopen(req, timeout=15) as r:
         return r.read()
 

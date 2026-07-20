@@ -1,9 +1,9 @@
 {
-    "id": "io.github.drvonmiau.Museic",
+    "id": "io.github.drvonmiau.Lyre",
     "runtime": "org.gnome.Platform",
     "runtime-version": "49",
     "sdk": "org.gnome.Sdk",
-    "command": "museic",
+    "command": "lyre",
     "finish-args": [
         "--share=network",
         "--share=ipc",
@@ -15,7 +15,7 @@
         "--filesystem=host-os:ro",
         "--filesystem=xdg-run/gvfs",
         "--filesystem=xdg-run/gvfsd",
-        "--own-name=org.mpris.MediaPlayer2.Museic",
+        "--own-name=org.mpris.MediaPlayer2.Lyre",
         "--talk-name=org.freedesktop.Notifications"
     ],
     "add-extensions": {
@@ -84,7 +84,7 @@
             ]
         },
         {
-            "name": "museic",
+            "name": "lyre",
             "builddir": true,
             "buildsystem": "meson",
             "sources": [

@@ -1,4 +1,4 @@
-application_id = 'io.github.drvonmiau.Museic'
+application_id = 'io.github.drvonmiau.Lyre'
 
 # App icon (512x512): the muse logo tile, cut out with transparent rounded
 # corners. The uncut master artwork is kept outside the repo.

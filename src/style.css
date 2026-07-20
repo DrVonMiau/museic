@@ -1,4 +1,4 @@
-/* Museic — system palette with lavender & gold accents.
+/* Lyre — system palette with lavender & gold accents.
    Surfaces and primary text come from libadwaita's named colors
    (@window_bg_color, @card_bg_color, @window_fg_color, …) so both themes
    track the system Adwaita palette; colour is reserved for accents:
@@ -9,14 +9,14 @@
    fallbacks only matter for non-Flatpak development runs. */
 
 /* Interactive accent */
-@define-color museic_lavender #8a70bd;
-@define-color museic_lavender_light #b6a3d8;
+@define-color lyre_lavender #8a70bd;
+@define-color lyre_lavender_light #b6a3d8;
 /* Favourites */
-@define-color museic_gold #c1962b;
-@define-color museic_gold_light #ddb964;
+@define-color lyre_gold #c1962b;
+@define-color lyre_gold_light #ddb964;
 /* Secondary text */
-@define-color museic_text_soft #7a6a9e;
-@define-color museic_text_soft_dark #b3a3d4;
+@define-color lyre_text_soft #7a6a9e;
+@define-color lyre_text_soft_dark #b3a3d4;
 
 /* The desktop behind the paper card: derived from the system window
    colour, shaded a touch on light so the white card still reads. */
@@ -31,7 +31,7 @@ window.dark .root-bg {
 
 link,
 .root-bg link {
-  color: @museic_lavender;
+  color: @lyre_lavender;
 }
 
 /* System switches and checks pick up the lavender accent instead of the
@@ -39,12 +39,12 @@ link,
    accent blue does) because the preferences dialog is a separate window
    the .dark scoping below can't reach. */
 switch:checked {
-  background-color: @museic_lavender;
+  background-color: @lyre_lavender;
 }
 
 checkbutton check:checked,
 checkbutton radio:checked {
-  background-color: @museic_lavender;
+  background-color: @lyre_lavender;
 }
 
 /* ---------- custom titlebar ---------- */
@@ -116,7 +116,7 @@ checkbutton radio:checked {
 }
 
 .search-entry:focus-within {
-  border-color: @museic_lavender;
+  border-color: @lyre_lavender;
 }
 
 /* ---------- paper card ---------- */
@@ -139,7 +139,7 @@ checkbutton radio:checked {
 }
 
 .back-btn:hover {
-  border-color: @museic_lavender;
+  border-color: @lyre_lavender;
   color: @window_fg_color;
 }
 
@@ -147,25 +147,25 @@ checkbutton radio:checked {
   font-family: "IBM Plex Mono", monospace;
   font-size: 11px;
   letter-spacing: 0.14em;
-  color: @museic_text_soft;
+  color: @lyre_text_soft;
 }
 
 .filter-label {
   font-family: "IBM Plex Mono", monospace;
   font-size: 11px;
-  color: alpha(@museic_text_soft, 0.75);
+  color: alpha(@lyre_text_soft, 0.75);
 }
 
 .mono-dim {
   font-family: "IBM Plex Mono", monospace;
   font-size: 12px;
-  color: @museic_text_soft;
+  color: @lyre_text_soft;
 }
 
 .mono-dim-sm {
   font-family: "IBM Plex Mono", monospace;
   font-size: 11px;
-  color: @museic_text_soft;
+  color: @lyre_text_soft;
 }
 
 /* ---------- artwork swatches ---------- */
@@ -206,14 +206,14 @@ checkbutton radio:checked {
 }
 
 .swatch.chip-selected {
-  border: 2px solid @museic_lavender;
+  border: 2px solid @lyre_lavender;
 }
 
 .swatch-caption {
   font-family: "IBM Plex Mono", monospace;
   font-size: 10px;
   letter-spacing: 0.08em;
-  color: @museic_text_soft;
+  color: @lyre_text_soft;
   background-color: alpha(@window_bg_color, 0.8);
   border-radius: 4px;
   padding: 3px 8px;
@@ -282,7 +282,7 @@ gridview.card-grid > child:focus {
 }
 
 .track-index.playing {
-  color: @museic_lavender;
+  color: @lyre_lavender;
 }
 
 .track-title {
@@ -294,7 +294,7 @@ gridview.card-grid > child:focus {
 
 .track-title.playing {
   font-weight: 600;
-  color: @museic_lavender;
+  color: @lyre_lavender;
 }
 
 listview > row,
@@ -355,13 +355,13 @@ listview.track-cells {
 .now-artist {
   font-family: "IBM Plex Mono", monospace;
   font-size: 12px;
-  color: @museic_text_soft;
+  color: @lyre_text_soft;
 }
 
 .time-label {
   font-family: "IBM Plex Mono", monospace;
   font-size: 10.5px;
-  color: alpha(@museic_text_soft, 0.85);
+  color: alpha(@lyre_text_soft, 0.85);
 }
 
 .transport-btn {
@@ -395,7 +395,7 @@ listview.track-cells {
 }
 
 .mini-transport:checked {
-  color: @museic_lavender;
+  color: @lyre_lavender;
   background: none;
 }
 
@@ -403,7 +403,7 @@ listview.track-cells {
   font-family: "IBM Plex Mono", monospace;
   font-size: 10px;
   letter-spacing: 0.08em;
-  color: @museic_text_soft;
+  color: @lyre_text_soft;
   padding: 2px 8px;
   min-height: 0;
   border-radius: 7px;
@@ -418,7 +418,7 @@ listview.track-cells {
   min-width: 44px;
   min-height: 44px;
   border-radius: 9999px;
-  background-color: @museic_lavender;
+  background-color: @lyre_lavender;
   color: #ffffff;
   font-size: 16px;
   padding: 0;
@@ -426,7 +426,7 @@ listview.track-cells {
 }
 
 .play-btn:hover {
-  background-color: shade(@museic_lavender, 1.08);
+  background-color: shade(@lyre_lavender, 1.08);
 }
 
 /* Flatten GtkScale into a thin progress/volume bar with no visible handle,
@@ -457,7 +457,7 @@ listview.track-cells {
 .volume-scale highlight {
   min-height: 2px;
   border-radius: 1px;
-  background-color: @museic_lavender;
+  background-color: @lyre_lavender;
   box-shadow: none;
 }
 
@@ -470,7 +470,7 @@ listview.track-cells {
   margin: -2px;
   padding: 0;
   border-radius: 9999px;
-  background-color: @museic_lavender;
+  background-color: @lyre_lavender;
   border: 1px solid @window_bg_color;
   box-shadow: 0 1px 3px alpha(#000, 0.25);
   opacity: 0;
@@ -486,12 +486,12 @@ listview.track-cells {
 
 /* Empty-state call-to-action pill. */
 .empty-cta {
-  background-color: @museic_lavender;
+  background-color: @lyre_lavender;
   color: #ffffff;
 }
 
 .empty-cta:hover {
-  background-color: shade(@museic_lavender, 1.08);
+  background-color: shade(@lyre_lavender, 1.08);
 }
 
 /* hover heart on track rows */
@@ -511,13 +511,13 @@ listview.track-cells {
 }
 
 .heart-btn:hover {
-  color: @museic_gold;
+  color: @lyre_gold;
   background: none;
 }
 
 .heart-btn.faved {
   opacity: 1;
-  color: @museic_gold;
+  color: @lyre_gold;
 }
 
 /* Up-next row remove button: hidden until the row is hovered. */
@@ -548,7 +548,7 @@ listview.track-cells {
 
 window.dark link,
 window.dark .root-bg link {
-  color: @museic_lavender_light;
+  color: @lyre_lavender_light;
 }
 
 window.dark .tab-btn.tab-active {
@@ -557,7 +557,7 @@ window.dark .tab-btn.tab-active {
 }
 
 window.dark .search-entry:focus-within {
-  border-color: @museic_lavender_light;
+  border-color: @lyre_lavender_light;
 }
 
 window.dark .paper {
@@ -565,7 +565,7 @@ window.dark .paper {
 }
 
 window.dark .back-btn:hover {
-  border-color: @museic_lavender_light;
+  border-color: @lyre_lavender_light;
 }
 
 window.dark .eyebrow,
@@ -574,19 +574,19 @@ window.dark .mono-dim-sm,
 window.dark .now-artist,
 window.dark .upnext-clear,
 window.dark .swatch-caption {
-  color: @museic_text_soft_dark;
+  color: @lyre_text_soft_dark;
 }
 
 window.dark .filter-label {
-  color: alpha(@museic_text_soft_dark, 0.75);
+  color: alpha(@lyre_text_soft_dark, 0.75);
 }
 
 window.dark .time-label {
-  color: alpha(@museic_text_soft_dark, 0.85);
+  color: alpha(@lyre_text_soft_dark, 0.85);
 }
 
 window.dark .swatch.chip-selected {
-  border-color: @museic_lavender_light;
+  border-color: @lyre_lavender_light;
 }
 
 window.dark .swatch-caption {
@@ -594,46 +594,46 @@ window.dark .swatch-caption {
 }
 
 window.dark .track-index.playing {
-  color: @museic_lavender_light;
+  color: @lyre_lavender_light;
 }
 
 window.dark .track-title.playing {
-  color: @museic_lavender_light;
+  color: @lyre_lavender_light;
 }
 
 window.dark .mini-transport:checked {
-  color: @museic_lavender_light;
+  color: @lyre_lavender_light;
 }
 
 window.dark .play-btn {
-  background-color: @museic_lavender_light;
+  background-color: @lyre_lavender_light;
   color: #1c1c1c;
 }
 
 window.dark .play-btn:hover {
-  background-color: shade(@museic_lavender_light, 1.08);
+  background-color: shade(@lyre_lavender_light, 1.08);
 }
 
 window.dark .progress-scale highlight,
 window.dark .volume-scale highlight {
-  background-color: @museic_lavender_light;
+  background-color: @lyre_lavender_light;
 }
 
 window.dark .progress-scale slider,
 window.dark .volume-scale slider {
-  background-color: @museic_lavender_light;
+  background-color: @lyre_lavender_light;
 }
 
 window.dark .empty-cta {
-  background-color: @museic_lavender_light;
+  background-color: @lyre_lavender_light;
   color: #1c1c1c;
 }
 
 window.dark .empty-cta:hover {
-  background-color: shade(@museic_lavender_light, 1.08);
+  background-color: shade(@lyre_lavender_light, 1.08);
 }
 
 window.dark .heart-btn:hover,
 window.dark .heart-btn.faved {
-  color: @museic_gold_light;
+  color: @lyre_gold_light;
 }

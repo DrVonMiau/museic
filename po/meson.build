@@ -1,1 +1,1 @@
-i18n.gettext('museic', preset: 'glib')
+i18n.gettext('lyre', preset: 'glib')

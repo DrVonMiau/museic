@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-	<id>io.github.drvonmiau.Museic</id>
+	<id>io.github.drvonmiau.Lyre</id>
 	<metadata_license>CC0-1.0</metadata_license>
 	<project_license>GPL-3.0-or-later</project_license>
-	<name>Museic</name>
+	<name>Lyre</name>
 	<summary>Play your local music</summary>
 	<developer id="io.github.drvonmiau">
 		<name>Daniel</name>
 	</developer>
 	<description>
 	  <p>
-	    Museic is a calm, focused player for the music you already have on
+	    Lyre is a calm, focused player for the music you already have on
 	    disk. Browse by artist, album or track, keep favourites and playlists,
 	    and play without an account or a cloud service.
 	  </p>
@@ -23,27 +23,27 @@
 	    <li>Folder watching, sleep timer, light and dark themes</li>
 	  </ul>
 	</description>
-	<launchable type="desktop-id">io.github.drvonmiau.Museic.desktop</launchable>
+	<launchable type="desktop-id">io.github.drvonmiau.Lyre.desktop</launchable>
 	<content_rating type="oars-1.1"/>
 	<branding>
 		<color type="primary" scheme_preference="light">#e2dbf1</color>
 		<color type="primary" scheme_preference="dark">#312b45</color>
 	</branding>
-	<url type="homepage">https://github.com/DrVonMiau/museic</url>
-	<url type="bugtracker">https://github.com/DrVonMiau/museic/issues</url>
-	<url type="vcs-browser">https://github.com/DrVonMiau/museic</url>
+	<url type="homepage">https://github.com/DrVonMiau/lyre</url>
+	<url type="bugtracker">https://github.com/DrVonMiau/lyre/issues</url>
+	<url type="vcs-browser">https://github.com/DrVonMiau/lyre</url>
 	<screenshots>
 		<screenshot type="default">
-			<image>https://raw.githubusercontent.com/DrVonMiau/museic/main/data/screenshots/albums.png</image>
+			<image>https://raw.githubusercontent.com/DrVonMiau/lyre/main/data/screenshots/albums.png</image>
 			<caption>Your albums on a clean paper card</caption>
 		</screenshot>
 		<screenshot>
-			<image>https://raw.githubusercontent.com/DrVonMiau/museic/main/data/screenshots/playing.png</image>
+			<image>https://raw.githubusercontent.com/DrVonMiau/lyre/main/data/screenshots/playing.png</image>
 			<caption>The floating player with the up-next queue</caption>
 		</screenshot>
 		<screenshot>
-			<image>https://raw.githubusercontent.com/DrVonMiau/museic/main/data/screenshots/dark.png</image>
-			<caption>Museic in the dark theme</caption>
+			<image>https://raw.githubusercontent.com/DrVonMiau/lyre/main/data/screenshots/dark.png</image>
+			<caption>Lyre in the dark theme</caption>
 		</screenshot>
 	</screenshots>
 	<requires>
@@ -54,6 +54,11 @@
 		<control>pointing</control>
 	</supports>
 	<releases>
+		<release version="0.3.0" date="2026-07-20">
+			<description>
+				<p>Museic is now Lyre — same player, new name. The app identity changed to io.github.drvonmiau.Lyre, so settings and the library index start fresh; your music files are untouched.</p>
+			</description>
+		</release>
 		<release version="0.2.0" date="2026-07-20">
 			<description>
 				<p>A visual refresh:</p>

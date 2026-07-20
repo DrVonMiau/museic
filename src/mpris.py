@@ -1,9 +1,9 @@
 """MPRIS (org.mpris.MediaPlayer2) D-Bus service: makes media keys work and
-shows Museic in the desktop's sound menu / lock screen with track metadata.
+shows Lyre in the desktop's sound menu / lock screen with track metadata.
 """
 from gi.repository import Gio, GLib
 
-BUS_NAME = "org.mpris.MediaPlayer2.Museic"
+BUS_NAME = "org.mpris.MediaPlayer2.Lyre"
 OBJECT_PATH = "/org/mpris/MediaPlayer2"
 
 INTROSPECTION_XML = """
@@ -98,7 +98,7 @@ class MprisServer:
         elif method == "SetPosition":
             trackid, position = params.unpack()
             current = w.queue.current
-            if current and trackid == f"/io/github/drvonmiau/Museic/track/{current.id}":
+            if current and trackid == f"/io/github/drvonmiau/Lyre/track/{current.id}":
                 w.player.seek(max(0.0, position / 1_000_000))
                 self.notify_seeked()
         elif method == "Raise":
@@ -130,8 +130,8 @@ class MprisServer:
             "CanQuit": GLib.Variant("b", True),
             "CanRaise": GLib.Variant("b", True),
             "HasTrackList": GLib.Variant("b", False),
-            "Identity": GLib.Variant("s", "Museic"),
-            "DesktopEntry": GLib.Variant("s", "io.github.drvonmiau.Museic"),
+            "Identity": GLib.Variant("s", "Lyre"),
+            "DesktopEntry": GLib.Variant("s", "io.github.drvonmiau.Lyre"),
             "SupportedUriSchemes": GLib.Variant("as", []),
             "SupportedMimeTypes": GLib.Variant("as", []),
             "Rate": GLib.Variant("d", 1.0),
@@ -177,7 +177,7 @@ class MprisServer:
             return GLib.Variant("a{sv}", {})
         meta = {
             "mpris:trackid": GLib.Variant(
-                "o", f"/io/github/drvonmiau/Museic/track/{track.id}"),
+                "o", f"/io/github/drvonmiau/Lyre/track/{track.id}"),
             "mpris:length": GLib.Variant("x", int((track.duration or 0) * 1_000_000)),
             "xesam:title": GLib.Variant("s", track.title),
             "xesam:artist": GLib.Variant("as", [track.artist]),

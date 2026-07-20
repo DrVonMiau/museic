@@ -9,7 +9,7 @@ from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 
 from .window import MusicWindow
 
-APP_ID = "io.github.drvonmiau.Museic"
+APP_ID = "io.github.drvonmiau.Lyre"
 
 
 class MusicPlayerApp(Adw.Application):
@@ -31,12 +31,12 @@ class MusicPlayerApp(Adw.Application):
     def do_startup(self):
         Adw.Application.do_startup(self)
         provider = Gtk.CssProvider()
-        provider.load_from_resource("/io/github/drvonmiau/Museic/style.css")
+        provider.load_from_resource("/io/github/drvonmiau/Lyre/style.css")
         Gtk.StyleContext.add_provider_for_display(
             Gdk.Display.get_default(), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         )
         icon_theme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default())
-        icon_theme.add_resource_path("/io/github/drvonmiau/Museic/icons")
+        icon_theme.add_resource_path("/io/github/drvonmiau/Lyre/icons")
         # Inside the Flatpak sandbox the host's icon themes aren't visible, so
         # symbolic lookups (e.g. the window controls) fall back to Adwaita.
         # With host-os access granted, searching the host's icon dirs lets the
@@ -54,13 +54,13 @@ class MusicPlayerApp(Adw.Application):
 
     def _show_about(self):
         about = Adw.AboutDialog(
-            application_name="Museic",
+            application_name="Lyre",
             application_icon=APP_ID,
             version=self.version or "0.1.0",
             developer_name="Daniel",
             license_type=Gtk.License.GPL_3_0,
-            website="https://github.com/drvonmiau/museic",
-            issue_url="https://github.com/drvonmiau/museic/issues",
+            website="https://github.com/drvonmiau/lyre",
+            issue_url="https://github.com/drvonmiau/lyre/issues",
         )
         about.present(self.window)
 

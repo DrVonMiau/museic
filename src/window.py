@@ -1,4 +1,4 @@
-"""Museic's main window.
+"""Lyre's main window.
 
 Visual design follows the Tempo-inspired mockup, reworked per follow-up
 feedback: a flat grey desktop, a "paper" card holding the library (Artists /
@@ -21,7 +21,7 @@ from .mpris import MprisServer
 from .player import Player, Queue
 from .widgets import Swatch
 
-APP_ID = "io.github.drvonmiau.Museic"
+APP_ID = "io.github.drvonmiau.Lyre"
 
 TRACK_ENTRIES = [
     ("Play", "play"), ("Play next", "play-next"), ("Play last", "play-last"),
@@ -101,7 +101,7 @@ def _fmt_time(seconds):
     return f"{seconds // 60}:{seconds % 60:02d}"
 
 
-@Gtk.Template(resource_path="/io/github/drvonmiau/Museic/window.ui")
+@Gtk.Template(resource_path="/io/github/drvonmiau/Lyre/window.ui")
 class MusicWindow(Adw.ApplicationWindow):
     __gtype_name__ = "MusicWindow"
 
@@ -337,7 +337,7 @@ class MusicWindow(Adw.ApplicationWindow):
         album = lib.get_album(self.con, t.album_id) if t.album_id else None
         self._player_art.set_path((album["cover_path"] if album else None) or None)
         self._set_player_revealed(True)
-        self.play_icon.set_from_icon_name("museic-play-symbolic")
+        self.play_icon.set_from_icon_name("lyre-play-symbolic")
         self._refresh_upnext()
 
     def _on_close_request(self, *_args):
@@ -448,7 +448,7 @@ class MusicWindow(Adw.ApplicationWindow):
         self._apply_layout_metrics()
 
     def _setup_help_overlay(self):
-        builder = Gtk.Builder.new_from_resource("/io/github/drvonmiau/Museic/gtk/help-overlay.ui")
+        builder = Gtk.Builder.new_from_resource("/io/github/drvonmiau/Lyre/gtk/help-overlay.ui")
         overlay = builder.get_object("help_overlay")
         if overlay is not None:
             self.set_help_overlay(overlay)
@@ -617,7 +617,7 @@ class MusicWindow(Adw.ApplicationWindow):
 
         # Three-dot menu button: hidden until the card is hovered, so it can't
         # be clicked before appearing and it only steals text width on hover.
-        menu_btn = Gtk.Button(icon_name="museic-more-symbolic", valign=Gtk.Align.CENTER,
+        menu_btn = Gtk.Button(icon_name="lyre-more-symbolic", valign=Gtk.Align.CENTER,
                               tooltip_text="More", css_classes=["flat", "card-menu-btn"])
         menu_btn.set_visible(False)
         menu_btn.set_cursor(POINTER_CURSOR)
@@ -780,9 +780,9 @@ class MusicWindow(Adw.ApplicationWindow):
         widget._menu_item_id = item_id
         widget._menu_entries = entries
         widget._menu_extra = extra or {}
-        if getattr(widget, "_museic_menu_attached", False):
+        if getattr(widget, "_lyre_menu_attached", False):
             return
-        widget._museic_menu_attached = True
+        widget._lyre_menu_attached = True
         gesture = Gtk.GestureClick(button=3)
         gesture.connect("pressed",
                         lambda _g, _n, x, y: self._show_item_menu(widget, widget, x, y))
@@ -1182,7 +1182,7 @@ class MusicWindow(Adw.ApplicationWindow):
 
         folders = Adw.PreferencesGroup(
             title="Music Folders",
-            description="Folders Museic scans for music",
+            description="Folders Lyre scans for music",
         )
         for row in lib.all_folders(self.con):
             path = row["path"]
@@ -1211,7 +1211,7 @@ class MusicWindow(Adw.ApplicationWindow):
         playback = Adw.PreferencesGroup(title="Playback")
         notify_row = Adw.SwitchRow(
             title="Track change notifications",
-            subtitle="Show a notification when the track changes and Museic is in the background",
+            subtitle="Show a notification when the track changes and Lyre is in the background",
         )
         self.settings.bind("notify-on-track-change", notify_row, "active",
                            Gio.SettingsBindFlags.DEFAULT)
@@ -1269,7 +1269,7 @@ class MusicWindow(Adw.ApplicationWindow):
             self.queue.history.clear()
             self.queue.invalidate_peek()
             self.player.stop()
-            self.play_icon.set_from_icon_name("museic-play-symbolic")
+            self.play_icon.set_from_icon_name("lyre-play-symbolic")
             self._update_inhibit(False)
             self._set_player_revealed(False)
             self._reload_all()
@@ -1770,7 +1770,7 @@ class MusicWindow(Adw.ApplicationWindow):
             if fresh is None:
                 q.current = None
                 self.player.stop()
-                self.play_icon.set_from_icon_name("museic-play-symbolic")
+                self.play_icon.set_from_icon_name("lyre-play-symbolic")
                 self._update_inhibit(False)
                 self._set_player_revealed(False)
             else:
@@ -1830,7 +1830,7 @@ class MusicWindow(Adw.ApplicationWindow):
         self._player_art.set_path((album["cover_path"] if album else None) or None)
 
         self._set_player_revealed(True)
-        self.play_icon.set_from_icon_name("museic-pause-symbolic")
+        self.play_icon.set_from_icon_name("lyre-pause-symbolic")
         self._refresh_upnext()
         self._apply_filters()
         lib.record_play(self.con, t.id)
@@ -1913,7 +1913,7 @@ class MusicWindow(Adw.ApplicationWindow):
             self._start_current()
         else:
             self.player.stop()
-            self.play_icon.set_from_icon_name("museic-play-symbolic")
+            self.play_icon.set_from_icon_name("lyre-play-symbolic")
             self._update_inhibit(False)
             self._refresh_upnext()
             self._apply_filters()
@@ -2013,11 +2013,11 @@ class MusicWindow(Adw.ApplicationWindow):
             return
         if self.player.is_playing():
             self.player.pause()
-            self.play_icon.set_from_icon_name("museic-play-symbolic")
+            self.play_icon.set_from_icon_name("lyre-play-symbolic")
             self._update_inhibit(False)
         else:
             self.player.play()
-            self.play_icon.set_from_icon_name("museic-pause-symbolic")
+            self.play_icon.set_from_icon_name("lyre-pause-symbolic")
             self._update_inhibit(True)
         self._apply_filters()
         if getattr(self, "mpris", None):
@@ -2052,7 +2052,7 @@ class MusicWindow(Adw.ApplicationWindow):
             level = "medium"
         else:
             level = "high"
-        self.volume_btn.set_icon_name(f"museic-volume-{level}-symbolic")
+        self.volume_btn.set_icon_name(f"lyre-volume-{level}-symbolic")
         self.volume_btn.set_tooltip_text("Unmute" if level == "muted" else "Mute")
 
     def _tick(self):
