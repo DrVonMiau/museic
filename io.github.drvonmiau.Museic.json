@@ -90,7 +90,12 @@
             "sources": [
                 {
                     "type": "dir",
-                    "path": "."
+                    "path": ".",
+                    "skip": [
+                        ".git",
+                        ".flatpak-builder",
+                        "_flatpak"
+                    ]
                 }
             ]
         }
